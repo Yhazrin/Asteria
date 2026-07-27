@@ -9,9 +9,13 @@
 1. `DECISION_LOG.md` 中最新且状态为 Accepted 的决策
 2. `PRODUCT_VISION_V2.md`
 3. `CORE_GAMEPLAY_AND_SYSTEMS.md` / `SOCIAL_SIMULATION.md`
-4. `MULTIPLAYER_PERSISTENCE.md` / `TECHNICAL_ARCHITECTURE.md`
-5. `ROADMAP_V2.md`
-6. 旧版 `GAME_DESIGN.md` / `IMPLEMENTATION_PLAN.md`
+4. `DATA_CONTRACTS.md` / `SAVE_SCHEMA.md`
+5. `EVENT_DIRECTOR.md` / `CONTENT_TAGGING.md`
+6. `MULTIPLAYER_PERSISTENCE.md` / `TECHNICAL_ARCHITECTURE.md`
+7. `TEST_SPEC.md` / `EDITOR_TOOLING.md`
+8. `ART_STYLE_GUIDE.md` / `AUDIO_DESIGN.md`
+9. `ROADMAP_V2.md`
+10. 旧版 `GAME_DESIGN.md` / `IMPLEMENTATION_PLAN.md`
 
 旧版文档仍用于保存球面移动、Observe、工程安全和“不要推倒重来”等有效原则，但其“完全不做生存/建设”的产品边界已由 V2 方向修订。
 
@@ -27,6 +31,16 @@
 | 工程 | `TECHNICAL_ARCHITECTURE.md` | Unity 代码模块、数据边界和技术债如何处理 | 程序、技术美术 |
 | 执行 | `ROADMAP_V2.md` | 下一步先做什么、每阶段如何验收 | 制作人、开发者 |
 | 决策 | `DECISION_LOG.md` | 为什么这样设计、哪些方向已被否决 | 全员 |
+| 数据 | `DATA_CONTRACTS.md` | 所有数据结构、ScriptableObject 定义和 DTO 格式 | 程序、策划 |
+| 存档 | `SAVE_SCHEMA.md` | 存档格式、保存策略、迁移流程和数据安全 | 程序、后端 |
+| 事件 | `EVENT_DIRECTOR.md` | 远征事件导演与家园社会事件的调度逻辑 | 策划、程序 |
+| 标签 | `CONTENT_TAGGING.md` | 统一内容标签体系，供事件导演和生成器筛选 | 策划、关卡 |
+| 测试 | `TEST_SPEC.md` | 测试策略、验收标准和回归流程 | 程序、QA |
+| 工具 | `EDITOR_TOOLING.md` | 编辑器工具的设计原则和使用方式 | 程序、技术美术 |
+| 美术 | `ART_STYLE_GUIDE.md` | 视觉语言、材质规范和风格约束 | 美术、技术美术 |
+| 音频 | `AUDIO_DESIGN.md` | 音频风格、音效分类和音乐策略 | 音频、策划 |
+| 术语 | `GLOSSARY.md` | 项目术语定义，避免歧义 | 全员 |
+| 入门 | `ONBOARDING.md` | 新成员快速入门指南 | 全员 |
 | Agent | 根目录 `AGENTS.md` | AI 编程工具每次任务必须遵守什么 | Cursor/Codex/Claude |
 
 ## 3. 当前工程事实
@@ -79,6 +93,16 @@
 | `MULTIPLAYER_PERSISTENCE.md` | Active |
 | `TECHNICAL_ARCHITECTURE.md` | Active |
 | `ROADMAP_V2.md` | Active |
+| `DATA_CONTRACTS.md` | Canonical |
+| `SAVE_SCHEMA.md` | Active |
+| `EVENT_DIRECTOR.md` | Active |
+| `CONTENT_TAGGING.md` | Active |
+| `TEST_SPEC.md` | Active |
+| `EDITOR_TOOLING.md` | Active |
+| `ART_STYLE_GUIDE.md` | Active |
+| `AUDIO_DESIGN.md` | Active |
+| `GLOSSARY.md` | Active |
+| `ONBOARDING.md` | Active |
 | `GAME_DESIGN.md` | Reference / 部分 Legacy |
 | `IMPLEMENTATION_PLAN.md` | Reference / 已由 V2 Roadmap 延伸 |
 | `PROJECT_AUDIT.md` | Reference，工程事实需按提交更新 |

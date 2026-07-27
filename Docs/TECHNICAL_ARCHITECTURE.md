@@ -27,6 +27,19 @@
 - 无场景流、存档、居民 AI、事件导演和运行时联机
 - 文档中的 Phase 状态需要跟随代码持续更新
 
+## 16. 相关文档
+
+本文档定义模块边界与服务接口。以下文档提供具体实现规范：
+
+| 文档 | 内容 |
+|------|------|
+| `DATA_CONTRACTS.md` | 所有 ScriptableObject 定义和存档 DTO 结构 |
+| `SAVE_SCHEMA.md` | 存档格式、保存策略和迁移流程 |
+| `EVENT_DIRECTOR.md` | 事件导演的候选查询、评分和调度逻辑 |
+| `CONTENT_TAGGING.md` | 统一内容标签体系 |
+| `TEST_SPEC.md` | 测试策略和验收标准 |
+| `EDITOR_TOOLING.md` | 编辑器工具设计规范 |
+
 ## 2. 目标模块
 
 建议保留 `Assets/_Game`，新增而非大搬家：

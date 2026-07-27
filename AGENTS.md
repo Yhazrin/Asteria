@@ -6,11 +6,24 @@
 
 1. `Docs/README.md`
 2. `Docs/PRODUCT_VISION_V2.md`
-3. 与任务直接相关的系统文档
+3. 与任务直接相关的系统文档（见下方文档矩阵）
 4. `Docs/ROADMAP_V2.md`
 5. 当前相关代码、Scene、Prefab、Package 与 Git 历史
 
 不得只读用户的一段提示词就开始修改。
+
+### 文档矩阵
+
+| 任务类型 | 必读文档 |
+|----------|----------|
+| 数据结构/存档 | `DATA_CONTRACTS.md`、`SAVE_SCHEMA.md` |
+| 事件/导演 | `EVENT_DIRECTOR.md`、`CONTENT_TAGGING.md` |
+| 测试/回归 | `TEST_SPEC.md` |
+| 编辑器工具 | `EDITOR_TOOLING.md` |
+| 美术/视觉 | `ART_STYLE_GUIDE.md` |
+| 音频/声音 | `AUDIO_DESIGN.md` |
+| 术语/概念 | `GLOSSARY.md` |
+| 新成员 | `ONBOARDING.md` |
 
 ## 2. 当前项目基线
 

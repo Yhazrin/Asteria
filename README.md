@@ -42,6 +42,16 @@ Asteria 采用“双星球循环”：
 | [`Docs/WORLD_CONTENT_MATRIX.md`](Docs/WORLD_CONTENT_MATRIX.md) | 家园/远征星球、生态区、事件和内容矩阵 |
 | [`Docs/MULTIPLAYER_PERSISTENCE.md`](Docs/MULTIPLAYER_PERSISTENCE.md) | 联机模型、权限、保存与掉线恢复 |
 | [`Docs/TECHNICAL_ARCHITECTURE.md`](Docs/TECHNICAL_ARCHITECTURE.md) | Unity 模块、数据边界与代码演进路线 |
+| [`Docs/DATA_CONTRACTS.md`](Docs/DATA_CONTRACTS.md) | 数据结构、ScriptableObject 定义与 DTO 格式 |
+| [`Docs/SAVE_SCHEMA.md`](Docs/SAVE_SCHEMA.md) | 存档格式、保存策略、迁移流程与数据安全 |
+| [`Docs/EVENT_DIRECTOR.md`](Docs/EVENT_DIRECTOR.md) | 远征事件导演与家园社会事件调度逻辑 |
+| [`Docs/CONTENT_TAGGING.md`](Docs/CONTENT_TAGGING.md) | 统一内容标签体系 |
+| [`Docs/TEST_SPEC.md`](Docs/TEST_SPEC.md) | 测试策略、验收标准与回归流程 |
+| [`Docs/EDITOR_TOOLING.md`](Docs/EDITOR_TOOLING.md) | 编辑器工具设计原则与使用方式 |
+| [`Docs/ART_STYLE_GUIDE.md`](Docs/ART_STYLE_GUIDE.md) | 美术风格、材质规范与色彩体系 |
+| [`Docs/AUDIO_DESIGN.md`](Docs/AUDIO_DESIGN.md) | 音频风格、音效分类与音乐策略 |
+| [`Docs/GLOSSARY.md`](Docs/GLOSSARY.md) | 项目术语表 |
+| [`Docs/ONBOARDING.md`](Docs/ONBOARDING.md) | 新成员入门指南 |
 | [`Docs/ROADMAP_V2.md`](Docs/ROADMAP_V2.md) | 从当前 Observe 切片到可玩 Alpha 的阶段计划 |
 | [`AGENTS.md`](AGENTS.md) | Cursor / Codex / Claude Code 的仓库执行规则 |
 
