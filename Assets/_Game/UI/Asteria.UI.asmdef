@@ -1,0 +1,17 @@
+{
+    "name": "Asteria.UI",
+    "rootNamespace": "Asteria.UI",
+    "references": [
+        "Asteria.Data",
+        "Asteria.Interaction"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

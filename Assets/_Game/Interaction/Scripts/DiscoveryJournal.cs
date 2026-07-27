@@ -51,6 +51,12 @@ namespace Asteria.Interaction
                 return false;
             }
 
+            if (!entry.IsIdValid())
+            {
+                Debug.LogWarning($"[Asteria] Rejecting ObserveEntry with invalid ID: '{entry.id}'");
+                return false;
+            }
+
             if (!_unlocked.Add(entry.id))
             {
                 return false;

@@ -1,0 +1,16 @@
+{
+    "name": "Asteria.Interaction",
+    "rootNamespace": "Asteria.Interaction",
+    "references": [
+        "Asteria.Data"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

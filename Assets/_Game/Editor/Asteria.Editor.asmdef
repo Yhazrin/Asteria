@@ -1,0 +1,22 @@
+{
+    "name": "Asteria.Editor",
+    "rootNamespace": "Asteria.Editor",
+    "references": [
+        "Asteria.Core",
+        "Asteria.Data",
+        "Asteria.Planet",
+        "Asteria.Player",
+        "Asteria.Interaction"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

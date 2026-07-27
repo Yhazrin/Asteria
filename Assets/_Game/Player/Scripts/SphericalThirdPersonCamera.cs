@@ -25,6 +25,7 @@ namespace Asteria.Player
         float _pitch = 12f;
         Vector3 _planarForward;
         bool _initialized;
+        IPlayerInputSource _input;
 
         public Transform Target
         {
@@ -40,6 +41,11 @@ namespace Asteria.Player
 
         /// <summary>Camera look direction projected onto the local tangent plane.</summary>
         public Vector3 PlanarForward => _planarForward;
+
+        public void SetInput(IPlayerInputSource input)
+        {
+            _input = input;
+        }
 
         /// <summary>Right axis on the local tangent plane.</summary>
         public Vector3 PlanarRight
@@ -72,8 +78,8 @@ namespace Asteria.Player
 
             if (Cursor.lockState == CursorLockMode.Locked)
             {
-                float yawDelta = Input.GetAxisRaw("Mouse X") * mouseSensitivity;
-                float pitchDelta = Input.GetAxisRaw("Mouse Y") * mouseSensitivity;
+                float yawDelta = (_input != null ? _input.MouseX : Input.GetAxisRaw("Mouse X")) * mouseSensitivity;
+                float pitchDelta = (_input != null ? _input.MouseY : Input.GetAxisRaw("Mouse Y")) * mouseSensitivity;
 
                 if (Mathf.Abs(yawDelta) > 0.0001f)
                 {
@@ -126,13 +132,23 @@ namespace Asteria.Player
 
         void HandleCursor()
         {
-            if (Input.GetKeyDown(KeyCode.Escape))
+            if (_input == null)
+            {
+                _input = target != null
+                    ? target.GetComponent<IPlayerInputSource>()
+                    : FindFirstObjectByType<LegacyInputAdapter>();
+            }
+
+            bool escape = _input != null ? _input.EscapePressed : Input.GetKeyDown(KeyCode.Escape);
+            bool leftClick = _input != null ? _input.LeftMouseDown : Input.GetMouseButtonDown(0);
+
+            if (escape)
             {
                 Cursor.lockState = CursorLockMode.None;
                 Cursor.visible = true;
             }
 
-            if (Input.GetMouseButtonDown(0) && Cursor.lockState != CursorLockMode.Locked)
+            if (leftClick && Cursor.lockState != CursorLockMode.Locked)
             {
                 Cursor.lockState = CursorLockMode.Locked;
                 Cursor.visible = false;

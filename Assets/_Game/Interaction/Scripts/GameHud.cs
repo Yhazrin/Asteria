@@ -1,6 +1,9 @@
 using Asteria.Data;
 using UnityEngine;
 
+// GameHud lives in the Interaction namespace (not UI) because InteractionDetector
+// and ObserveInteractable depend on it. Keeping it here avoids a circular asmdef
+// dependency between Interaction ↔ UI.
 namespace Asteria.Interaction
 {
     /// <summary>

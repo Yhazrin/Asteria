@@ -35,6 +35,7 @@ namespace Asteria.Player
 
         Rigidbody _body;
         SphericalThirdPersonCamera _orbitCamera;
+        IPlayerInputSource _input;
         bool _jumpRequested;
         bool _isGrounded;
 
@@ -49,6 +50,11 @@ namespace Asteria.Player
         public void SetConfig(PlayerMotorConfig motorConfig)
         {
             config = motorConfig;
+        }
+
+        public void SetInput(IPlayerInputSource input)
+        {
+            _input = input;
         }
 
         float WalkSpeed => config != null ? config.walkSpeed : walkSpeed;
@@ -76,7 +82,14 @@ namespace Asteria.Player
 
         void Update()
         {
-            if (Input.GetButtonDown("Jump"))
+            if (_input == null)
+            {
+                // Auto-find LegacyInputAdapter on the same GameObject or scene.
+                _input = GetComponent<IPlayerInputSource>()
+                         ?? FindFirstObjectByType<LegacyInputAdapter>();
+            }
+
+            if (_input != null ? _input.JumpPressed : Input.GetButtonDown("Jump"))
             {
                 _jumpRequested = true;
             }
@@ -93,9 +106,11 @@ namespace Asteria.Player
             Vector3 up = planet.GetSurfaceUp(_body.position);
             UpdateGrounded(up);
 
-            Vector2 moveInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+            Vector2 moveInput = _input != null
+                ? new Vector2(_input.Horizontal, _input.Vertical)
+                : new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
             moveInput = Vector2.ClampMagnitude(moveInput, 1f);
-            bool running = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
+            bool running = _input != null ? _input.RunHeld : (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift));
             float targetSpeed = running ? RunSpeed : WalkSpeed;
 
             Vector3 moveDir = GetTangentMoveDirection(up, moveInput);

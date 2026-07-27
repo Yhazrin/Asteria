@@ -1,0 +1,19 @@
+{
+    "name": "Asteria.Player",
+    "rootNamespace": "Asteria.Player",
+    "references": [
+        "Asteria.Core",
+        "Asteria.Data",
+        "Asteria.Planet",
+        "Asteria.Interaction"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

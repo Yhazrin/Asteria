@@ -1,8 +1,8 @@
-# Asteria — Phase 0 项目审计
+# Asteria — 项目审计
 
-> 审计日期：2026-07-26（二次审计，覆盖过时结论）  
-> 依据：`Docs/GAME_DESIGN.md`、`Docs/PHASE1_RUN.md`、仓库真实现状  
-> 范围：**只读分析**；仅允许更新本文件与 `IMPLEMENTATION_PLAN.md`。未改玩法代码 / Scene / Prefab / Packages / ProjectSettings。
+> 审计日期：2026-07-27（Milestone A 完成后更新）
+> 依据：仓库真实现状、Milestone A 实施结果
+> 范围：反映 Milestone A 完成后的工程状态。
 
 ---
 
@@ -15,12 +15,16 @@
 | Assets 内容 | **非空** | 已有 `_Game` 目录、球面 Demo、脚本、材质、Prefab |
 | 球面玩法基础 | **已跑通（垂直切片）** | 向心重力、切面移动、第三人称轨道相机、绕球标记 |
 | 已知 WS 原地转圈 | **代码侧已修复** | 相机轨道帧与角色 facing 解耦（见 §9） |
-| Observe / Restore / 痕迹 | 未开始 | Interaction 目录为空 |
+| Observe | **已完成** | IInteractable、InteractionDetector、ObserveInteractable、DiscoveryJournal |
+| asmdef | **已完成** | 7 个程序集：Core、Data、Planet、Interaction、Player、UI、Editor |
+| 测试 | **已完成** | EditMode 测试（PlanetBody、ObserveEntry ID、DiscoveryJournal）、PlayMode 测试（Observe 流程） |
+| 输入抽象 | **已完成** | IPlayerInputSource + LegacyInputAdapter，SphericalMotor/Camera 已接入 |
+| ID 校验 | **已完成** | ObserveEntry.IsIdValid() + DiscoveryJournal 运行时校验 |
 | 联机基础 | **未就绪** | 仅 Multiplayer Center，无 Netcode |
-| 目录 vs 推荐结构 | **部分对齐** | 缺 World/Data/Art/Scenes/Tests；现用 Planet/Environment/Multiplayer |
-| 总体判定 | **可在现有 Demo 上演进** | 禁止推倒重来；下一阶段补 Observe + 目录重整 + 配置 SO |
+| 目录 vs 推荐结构 | **基本对齐** | 已有 Data、Interaction、Tests；现用 Planet/Environment/Multiplayer |
+| 总体判定 | **Milestone A 完成，可进入 Milestone B** | 禁止推倒重来；下一阶段补存档 + 家园雏形 |
 
-**一句话：** 这不是空仓库。Asteria 已具备可 Play 的球面移动 Demo（URP + 自定义重力 + 手写第三人称相机）。Phase 0 之后应**保留并演进**该底座，进入 Observe / HUD / 配置化 / 目录对齐；不要重装 URP、不要重写球面电机。
+**一句话：** Milestone A 已完成。Asteria 具备可 Play 的球面移动 Demo + Observe 交互 + 稳定 asmdef 边界 + 基础测试覆盖。可进入 Milestone B（可保存的家园雏形）。
 
 ---
 

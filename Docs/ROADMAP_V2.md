@@ -19,12 +19,12 @@
 
 ### 任务
 
-- [ ] 更新 `PROJECT_AUDIT.md` 的过时状态
-- [ ] 为核心运行时脚本增加第一批 asmdef
-- [ ] 增加球面重力、Observe 单次解锁的 EditMode/PlayMode 测试
-- [ ] 抽取 `IPlayerInputSource`，但继续使用旧 Input Manager 适配器
-- [ ] 为发现数据增加稳定 ID 校验
-- [ ] 保留 Editor Upgrade 工具并记录幂等性要求
+- [x] 更新 `PROJECT_AUDIT.md` 的过时状态
+- [x] 为核心运行时脚本增加第一批 asmdef
+- [x] 增加球面重力、Observe 单次解锁的 EditMode/PlayMode 测试
+- [x] 抽取 `IPlayerInputSource`，但继续使用旧 Input Manager 适配器
+- [x] 为发现数据增加稳定 ID 校验
+- [x] 保留 Editor Upgrade 工具并记录幂等性要求
 
 ### 验收
 

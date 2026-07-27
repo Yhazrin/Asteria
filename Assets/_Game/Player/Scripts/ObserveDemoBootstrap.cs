@@ -64,6 +64,12 @@ namespace Asteria.Player
                 {
                     motor.gameObject.AddComponent<InteractionDetector>();
                 }
+
+                // Ensure LegacyInputAdapter exists for IPlayerInputSource.
+                if (motor.GetComponent<IPlayerInputSource>() == null)
+                {
+                    motor.gameObject.AddComponent<LegacyInputAdapter>();
+                }
             }
 
             if (FindFirstObjectByType<ObserveInteractable>() != null)
