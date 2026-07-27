@@ -11,12 +11,10 @@ namespace Asteria.Tests.EditMode
         public void ResidentDefinition_DefaultValues_AreValid()
         {
             var def = ScriptableObject.CreateInstance<ResidentDefinition>();
-            def.residentId = "test_resident";
-            def.displayName = "Test";
 
-            Assert.AreEqual("test_resident", def.residentId);
-            Assert.AreEqual("Test", def.displayName);
-            Assert.AreEqual(0f, def.sociability, 0.01f);
+            Assert.IsNotNull(def.ResidentId);
+            Assert.IsNotNull(def.DisplayName);
+            Assert.AreEqual(0f, def.Sociability, 0.01f);
             Object.DestroyImmediate(def);
         }
 

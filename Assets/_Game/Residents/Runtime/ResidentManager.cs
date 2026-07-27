@@ -55,13 +55,13 @@ namespace Asteria.Residents
                 }
 
                 var go = GameObject.CreatePrimitive(PrimitiveType.Capsule);
-                go.name = $"Resident_{def.displayName}";
+                go.name = $"Resident_{def.DisplayName}";
                 Destroy(go.GetComponent<CapsuleCollider>());
                 CapsuleCollider col = go.AddComponent<CapsuleCollider>();
                 col.height = 2f;
                 col.radius = 0.35f;
 
-                MaterialHelper.ApplyColor(go.GetComponent<MeshRenderer>(), def.bodyColor);
+                MaterialHelper.ApplyColor(go.GetComponent<MeshRenderer>(), def.BodyColor);
 
                 // Add agent
                 var agent = go.AddComponent<ResidentAgent>();
@@ -78,7 +78,7 @@ namespace Asteria.Residents
             _interactionCheckTimer -= Time.deltaTime;
             if (_interactionCheckTimer <= 0f)
             {
-                _interactionCheckTimer = 3f; // Check every 3 seconds
+                _interactionCheckTimer = AsteriaConstants.ResidentInteractionCheckInterval;
                 CheckAutonomousInteractions();
             }
         }
@@ -98,7 +98,7 @@ namespace Asteria.Residents
                     }
 
                     float distance = Vector3.Distance(a.transform.position, b.transform.position);
-                    if (distance < 4f)
+                    if (distance < AsteriaConstants.ResidentInteractionDistance)
                     {
                         a.TryInteract(b);
                     }
@@ -111,7 +111,7 @@ namespace Asteria.Residents
         /// </summary>
         public ResidentAgent GetResident(string residentId)
         {
-            return _agents.FirstOrDefault(a => a.Definition != null && a.Definition.residentId == residentId);
+            return _agents.FirstOrDefault(a => a.Definition != null && a.Definition.ResidentId == residentId);
         }
 
         /// <summary>

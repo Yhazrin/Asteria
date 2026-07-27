@@ -91,7 +91,7 @@ namespace Asteria.Core
                 a.transform.position = Vector3.Lerp(a.transform.position, midPoint, 0.5f);
                 b.transform.position = Vector3.Lerp(b.transform.position, midPoint, 0.5f);
 
-                Debug.Log($"[Asteria] Follow-up: {a.Definition.displayName} and {b.Definition.displayName} celebrate the expedition results.");
+                Debug.Log($"[Asteria] Follow-up: {a.Definition.DisplayName} and {b.Definition.DisplayName} celebrate the expedition results.");
             }
         }
     }

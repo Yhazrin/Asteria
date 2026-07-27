@@ -38,8 +38,7 @@ namespace Asteria.Expedition
                 return;
             }
 
-            // Trigger pressure after 3-5 minutes of expedition
-            if (_expeditionTime < 180f)
+            if (_expeditionTime < AsteriaConstants.PressureTriggerDelay)
             {
                 return;
             }

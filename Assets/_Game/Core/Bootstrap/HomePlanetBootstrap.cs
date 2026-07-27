@@ -12,7 +12,7 @@ namespace Asteria.Core
     /// </summary>
     public sealed class HomePlanetBootstrap : MonoBehaviour
     {
-        [SerializeField] float planetRadius = 180f;
+        [SerializeField] float planetRadius = AsteriaConstants.DefaultHomePlanetRadius;
 
         void Start()
         {
@@ -160,30 +160,15 @@ namespace Asteria.Core
 
         void SpawnResidents(PlanetBody planet)
         {
-            // Create default resident definitions at runtime
             var defA = ScriptableObject.CreateInstance<ResidentDefinition>();
-            defA.residentId = "lian";
-            defA.displayName = "莲";
-            defA.pronouns = "she/her";
-            defA.sociability = 0.6f;
-            defA.curiosity = 0.4f;
-            defA.warmth = 0.7f;
-            defA.order = 0.3f;
-            defA.boldness = 0.2f;
-            defA.quirks = new[] { "会给所有植物取名字" };
-            defA.bodyColor = new Color(0.85f, 0.75f, 0.8f);
+            defA.InitializeRuntime("lian", "莲", new Color(0.85f, 0.75f, 0.8f),
+                soc: 0.6f, cur: 0.4f, war: 0.7f, ord: 0.3f, bol: 0.2f,
+                quirkList: new[] { "会给所有植物取名字" });
 
             var defB = ScriptableObject.CreateInstance<ResidentDefinition>();
-            defB.residentId = "kai";
-            defB.displayName = "凯";
-            defB.pronouns = "he/him";
-            defB.sociability = -0.3f;
-            defB.curiosity = 0.8f;
-            defB.warmth = 0.1f;
-            defB.order = 0.6f;
-            defB.boldness = 0.7f;
-            defB.quirks = new[] { "害怕下坡却喜欢高处" };
-            defB.bodyColor = new Color(0.7f, 0.8f, 0.85f);
+            defB.InitializeRuntime("kai", "凯", new Color(0.7f, 0.8f, 0.85f),
+                soc: -0.3f, cur: 0.8f, war: 0.1f, ord: 0.6f, bol: 0.7f,
+                quirkList: new[] { "害怕下坡却喜欢高处" });
 
             // Create ResidentManager
             GameObject managerGo = new GameObject("ResidentManager");

@@ -21,7 +21,7 @@ namespace Asteria.Core
             }
             else
             {
-                UnityEngine.SceneManagement.SceneManager.LoadScene("HomePlanet");
+                UnityEngine.SceneManagement.SceneManager.LoadScene(AsteriaConstants.HomeSceneName);
             }
         }
     }

@@ -97,7 +97,7 @@ namespace Asteria.Expedition
                 totalIntensity += intensity;
             }
 
-            return totalIntensity > 2f;
+            return totalIntensity > AsteriaConstants.PressureFallThreshold;
         }
 
         /// <summary>

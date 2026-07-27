@@ -9,8 +9,6 @@ namespace Asteria.Persistence
     /// </summary>
     public sealed class SaveService : ISaveService
     {
-        const int CurrentSchemaVersion = 1;
-        const string SaveFileName = "save.json";
         const string BackupExtension = ".bak";
         const string Backup2Extension = ".bak2";
 
@@ -27,7 +25,7 @@ namespace Asteria.Persistence
 
         public void LoadOrCreate()
         {
-            string savePath = Path.Combine(_saveDir, SaveFileName);
+            string savePath = Path.Combine(_saveDir, AsteriaConstants.SaveFileName);
 
             if (File.Exists(savePath))
             {
@@ -42,7 +40,7 @@ namespace Asteria.Persistence
                     }
 
                     // Migrate if needed
-                    if (_current.schemaVersion < CurrentSchemaVersion)
+                    if (_current.schemaVersion < AsteriaConstants.CurrentSchemaVersion)
                     {
                         Migrate(_current);
                     }
@@ -76,7 +74,7 @@ namespace Asteria.Persistence
             _current.saveTimestamp = DateTime.UtcNow.ToString("o");
             _current.gameVersion = Application.version;
 
-            string savePath = Path.Combine(_saveDir, SaveFileName);
+            string savePath = Path.Combine(_saveDir, AsteriaConstants.SaveFileName);
             string tmpPath = savePath + ".tmp";
 
             try
@@ -122,7 +120,7 @@ namespace Asteria.Persistence
         {
             _current = new SaveRoot
             {
-                schemaVersion = CurrentSchemaVersion,
+                schemaVersion = AsteriaConstants.CurrentSchemaVersion,
                 saveTimestamp = DateTime.UtcNow.ToString("o"),
                 gameVersion = Application.version,
                 profileId = "default",
@@ -135,7 +133,7 @@ namespace Asteria.Persistence
 
         bool TryLoadBackup()
         {
-            string savePath = Path.Combine(_saveDir, SaveFileName);
+            string savePath = Path.Combine(_saveDir, AsteriaConstants.SaveFileName);
             string[] backups = { savePath + BackupExtension, savePath + Backup2Extension };
 
             foreach (string backupPath in backups)
@@ -170,8 +168,8 @@ namespace Asteria.Persistence
         {
             // Future migrations go here.
             // Example: if (save.schemaVersion == 1) { migrate to 2; save.schemaVersion = 2; }
-            save.schemaVersion = CurrentSchemaVersion;
-            Debug.Log($"[Asteria] Save migrated to schema v{CurrentSchemaVersion}");
+            save.schemaVersion = AsteriaConstants.CurrentSchemaVersion;
+            Debug.Log($"[Asteria] Save migrated to schema v{AsteriaConstants.CurrentSchemaVersion}");
         }
     }
 }

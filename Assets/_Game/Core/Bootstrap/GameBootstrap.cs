@@ -14,8 +14,8 @@ namespace Asteria.Core
     {
         static GameBootstrap _instance;
 
-        [SerializeField] string homeSceneName = "HomePlanet";
-        [SerializeField] string expeditionSceneName = "SphereMoveDemo";
+        [SerializeField] string homeSceneName = AsteriaConstants.HomeSceneName;
+        [SerializeField] string expeditionSceneName = AsteriaConstants.ExpeditionSceneName;
 
         SaveService _saveService;
         DiscoveryRepository _discoveryRepository;

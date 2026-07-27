@@ -21,8 +21,7 @@ namespace Asteria.Core
             }
             else
             {
-                // Fallback: direct scene load
-                UnityEngine.SceneManagement.SceneManager.LoadScene("SphereMoveDemo");
+                UnityEngine.SceneManagement.SceneManager.LoadScene(AsteriaConstants.ExpeditionSceneName);
             }
         }
     }

@@ -42,7 +42,7 @@ namespace Asteria.Residents
 
             _state = savedState ?? new ResidentState
             {
-                residentId = def.residentId,
+                residentId = def.ResidentId,
                 familiarity = 0.5f,
                 affinity = 0.5f,
                 trust = 0.5f,
@@ -130,7 +130,7 @@ namespace Asteria.Residents
             _currentTarget = FindDestination(destTag);
 
             // Schedule duration: 30-90 seconds per activity
-            _scheduleTimer = Random.Range(30f, 90f);
+            _scheduleTimer = Random.Range(AsteriaConstants.ResidentScheduleDurationMin, AsteriaConstants.ResidentScheduleDurationMax);
 
             // Update needs based on activity
             switch (activity)
@@ -189,7 +189,7 @@ namespace Asteria.Residents
             {
                 if (_fallbackDest == null)
                 {
-                    var fallbackGo = new GameObject($"Resident_{definition?.displayName}_FallbackDest");
+                    var fallbackGo = new GameObject($"Resident_{definition?.DisplayName}_FallbackDest");
                     _fallbackDest = fallbackGo.transform;
                 }
 
@@ -212,7 +212,7 @@ namespace Asteria.Residents
             }
 
             float distance = Vector3.Distance(transform.position, other.transform.position);
-            if (distance > 5f)
+            if (distance > AsteriaConstants.ResidentInteractionDistance)
             {
                 return false;
             }
@@ -225,7 +225,7 @@ namespace Asteria.Residents
             {
                 eventId = $"interact_{eventType}_{System.Guid.NewGuid().ToString("N")[..8]}",
                 timestamp = System.DateTime.UtcNow.ToString("o"),
-                participants = new[] { definition.residentId, other.definition.residentId },
+                participants = new[] { definition.ResidentId, other.definition.ResidentId },
                 location = _state.currentDestination,
                 emotionalTone = eventType == "conflict" ? "tense" : "happy",
                 tags = new[] { eventType, _state.currentActivity },
@@ -249,10 +249,10 @@ namespace Asteria.Residents
                 other.State.tension = Mathf.Min(1f, other.State.tension + 0.1f);
             }
 
-            _interactionCooldown = 15f;
-            other._interactionCooldown = 15f;
+            _interactionCooldown = AsteriaConstants.ResidentInteractionCooldown;
+            other._interactionCooldown = AsteriaConstants.ResidentInteractionCooldown;
 
-            Debug.Log($"[Asteria] {definition.displayName} and {other.definition.displayName}: {eventType}");
+            Debug.Log($"[Asteria] {definition.DisplayName} and {other.definition.DisplayName}: {eventType}");
             return true;
         }
 
@@ -264,12 +264,11 @@ namespace Asteria.Residents
             }
 
             // High warmth + high sociability = friendly
-            float friendliness = (definition.warmth + definition.sociability +
-                                  other.definition.warmth + other.definition.sociability) / 4f;
+            float friendliness = (definition.Warmth + definition.Sociability +
+                                  other.definition.Warmth + other.definition.Sociability) / 4f;
 
-            // High tension + different order = conflict prone
             float conflictProne = (_state.tension + other.State.tension) / 2f +
-                                  Mathf.Abs(definition.order - other.definition.order) * 0.3f;
+                                  Mathf.Abs(definition.Order - other.definition.Order) * 0.3f;
 
             if (conflictProne > 0.6f && Random.value < 0.3f)
             {
@@ -293,7 +292,7 @@ namespace Asteria.Residents
             {
                 eventId = $"wish_{System.Guid.NewGuid().ToString("N")[..8]}",
                 timestamp = System.DateTime.UtcNow.ToString("o"),
-                participants = new[] { definition.residentId },
+                participants = new[] { definition.ResidentId },
                 location = _state.currentDestination,
                 emotionalTone = "curious",
                 tags = new[] { "wish", "player_suggestion" },
@@ -302,7 +301,7 @@ namespace Asteria.Residents
             };
 
             _state.memories.Add(memory);
-            Debug.Log($"[Asteria] {definition.displayName} received wish: {wishDescription}");
+            Debug.Log($"[Asteria] {definition.DisplayName} received wish: {wishDescription}");
         }
     }
 }
