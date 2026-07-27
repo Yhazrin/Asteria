@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36db3169188142a8a16226ee0be42c39, type: 3}
+  m_Name: PlayerMotorConfig
+  m_EditorClassIdentifier: Assembly-CSharp::Asteria.Data.PlayerMotorConfig
+  walkSpeed: 8
+  runSpeed: 14
+  acceleration: 40
+  airControl: 0.35
+  jumpSpeed: 7.5
+  rotationSharpness: 12
+  groundCheckDistance: 0.35
+  groundedSkin: 0.08

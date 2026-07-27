@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a59da54846b4de5a82497809c56bee8, type: 3}
+  m_Name: Observe_WindBellStone
+  m_EditorClassIdentifier: Assembly-CSharp::Asteria.Data.ObserveEntry
+  id: wind_bell_stone
+  displayName: "\u98CE\u94C3\u77F3"
+  description: "\u4E00\u5757\u88AB\u98CE\u957F\u671F\u6253\u78E8\u7684\u77F3\u5934\u3002\u9760\u8FD1\u65F6\u80FD\u542C\u89C1\u5F88\u8F7B\u7684\u91D1\u5C5E\u98A4\u97F3\u3002"
+  promptText: "\u6309 E \u89C2\u5BDF \xB7 \u98CE\u94C3\u77F3"
