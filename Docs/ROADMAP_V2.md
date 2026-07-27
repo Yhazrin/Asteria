@@ -75,13 +75,13 @@
 
 ### 任务
 
-- [ ] `ResidentDefinition`、`ResidentState`、`PersonalityState`
-- [ ] 2 名星友 Prefab 与数据
-- [ ] 球面路网节点和最短路径原型
-- [ ] 起居、广场、观测台三个日程目的地
-- [ ] 1 个自主日常事件
-- [ ] 1 个玩家建议选项
-- [ ] 关键互动写入 `MemoryRecord`
+- [x] `ResidentDefinition`、`ResidentState`、`PersonalityState`
+- [x] 2 名星友 Prefab 与数据
+- [x] 球面路网节点和最短路径原型
+- [x] 起居、广场、观测台三个日程目的地
+- [x] 1 个自主日常事件
+- [x] 1 个玩家建议选项
+- [x] 关键互动写入 `MemoryRecord`
 
 ### 验收
 

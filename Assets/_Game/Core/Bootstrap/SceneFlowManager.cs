@@ -1,5 +1,7 @@
 using Asteria.Interaction;
+using Asteria.Expedition;
 using Asteria.Persistence;
+using Asteria.Residents;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -17,6 +19,7 @@ namespace Asteria.Core
         [SerializeField] string expeditionSceneName = "SphereMoveDemo";
 
         GameBootstrap _bootstrap;
+        ExpeditionResult _pendingResult;
 
         public static SceneFlowManager Instance => _instance;
 
@@ -59,18 +62,22 @@ namespace Asteria.Core
 
         void SetupHomeScene()
         {
-            // Ensure DiscoveryJournal exists and is synced from save
             SyncDiscoveryFromSave();
 
-            // Wire the "return to expedition" trigger
-            Debug.Log("[Asteria] Home scene ready. Walk to the expedition beacon to depart.");
+            // Settle pending expedition result
+            if (_pendingResult != null)
+            {
+                var manager = FindFirstObjectByType<ResidentManager>();
+                ExpeditionSettlement.Settle(_pendingResult, _bootstrap?.SaveService, manager);
+                _pendingResult = null;
+            }
+
+            Debug.Log("[Asteria] Home scene ready.");
         }
 
         void SetupExpeditionScene()
         {
-            // Ensure DiscoveryJournal exists and is synced from save
             SyncDiscoveryFromSave();
-
             Debug.Log("[Asteria] Expedition scene ready.");
         }
 
@@ -100,6 +107,16 @@ namespace Asteria.Core
         /// </summary>
         public void GoHome()
         {
+            _bootstrap?.SaveService?.Save();
+            SceneManager.LoadScene(homeSceneName);
+        }
+
+        /// <summary>
+        /// Called by UI/interaction to go home with expedition results.
+        /// </summary>
+        public void GoHomeWithResult(ExpeditionResult result)
+        {
+            _pendingResult = result;
             _bootstrap?.SaveService?.Save();
             SceneManager.LoadScene(homeSceneName);
         }
