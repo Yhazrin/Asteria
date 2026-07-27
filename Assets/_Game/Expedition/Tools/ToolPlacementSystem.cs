@@ -104,14 +104,8 @@ namespace Asteria.Expedition
             go.transform.localScale = new Vector3(0.5f, 2f, 0.5f);
             go.GetComponent<Collider>().isTrigger = true;
 
-            var renderer = go.GetComponent<MeshRenderer>();
-            Shader shader = Shader.Find("Universal Render Pipeline/Lit");
-            if (shader == null) shader = Shader.Find("Sprites/Default");
-            Material mat = new(shader);
             Color c = toolId == "warm_light" ? new Color(1f, 0.9f, 0.6f) : new Color(0.5f, 0.8f, 1f);
-            if (mat.HasProperty("_BaseColor")) mat.SetColor("_BaseColor", c);
-            mat.color = c;
-            renderer.sharedMaterial = mat;
+            MaterialHelper.ApplyColor(go.GetComponent<MeshRenderer>(), c);
 
             return go;
         }

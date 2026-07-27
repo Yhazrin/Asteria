@@ -9,7 +9,7 @@ namespace Asteria.Interaction
     /// </summary>
     public sealed class InteractionInstance
     {
-        public enum State { Ready, InProgress, Completing, Completed, Failed, Cancelled }
+        public enum State { Ready, InProgress, Completed, Failed, Cancelled }
 
         readonly ILongInteraction _interaction;
         readonly InteractionContext _context;
@@ -53,7 +53,7 @@ namespace Asteria.Interaction
         {
             if (_state != State.InProgress)
             {
-                return _state == State.Completing;
+                return false;
             }
 
             _progress += deltaTime / _duration;
@@ -64,7 +64,6 @@ namespace Asteria.Interaction
 
             if (_progress >= 1f)
             {
-                _state = State.Completing;
                 _interaction.OnComplete(_context);
                 _state = State.Completed;
                 OnStateChanged?.Invoke(_state);
@@ -76,7 +75,7 @@ namespace Asteria.Interaction
 
         public void Cancel()
         {
-            if (_state == State.InProgress || _state == State.Completing)
+            if (_state == State.InProgress)
             {
                 _state = State.Cancelled;
                 _interaction.OnCancel(_context);

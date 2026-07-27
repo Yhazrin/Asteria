@@ -16,7 +16,7 @@ namespace Asteria.Core
         /// <summary>
         /// Settle an expedition result. Called when the player returns home.
         /// </summary>
-        public static void Settle(ExpeditionResult result, SaveService saveService, ResidentManager residentManager)
+        public static void Settle(ExpeditionResult result, ISaveService saveService, ResidentManager residentManager)
         {
             if (result == null || saveService == null)
             {

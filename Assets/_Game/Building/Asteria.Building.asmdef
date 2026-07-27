@@ -2,7 +2,6 @@
     "name": "Asteria.Building",
     "rootNamespace": "Asteria.Building",
     "references": [
-        "Asteria.Core",
         "Asteria.Planet"
     ],
     "includePlatforms": [],

@@ -11,6 +11,8 @@ namespace Asteria.Expedition
     {
         readonly Dictionary<string, float> _activeStates = new();
         readonly Dictionary<string, float> _stateTimers = new();
+        readonly List<string> _expiredBuffer = new();
+        readonly List<string> _keysBuffer = new();
 
         /// <summary>True if the player is affected by any pressure.</summary>
         public bool IsUnderPressure => _activeStates.Count > 0;
@@ -48,20 +50,20 @@ namespace Asteria.Expedition
 
         void Update()
         {
-            // Tick down state timers
-            var expired = new List<string>();
-            var keys = new List<string>(_stateTimers.Keys);
+            _expiredBuffer.Clear();
+            _keysBuffer.Clear();
+            _keysBuffer.AddRange(_stateTimers.Keys);
 
-            foreach (var key in keys)
+            foreach (var key in _keysBuffer)
             {
                 _stateTimers[key] -= Time.deltaTime;
                 if (_stateTimers[key] <= 0f)
                 {
-                    expired.Add(key);
+                    _expiredBuffer.Add(key);
                 }
             }
 
-            foreach (var key in expired)
+            foreach (var key in _expiredBuffer)
             {
                 RemoveState(key);
             }

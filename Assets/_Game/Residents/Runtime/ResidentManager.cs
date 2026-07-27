@@ -19,6 +19,16 @@ namespace Asteria.Residents
 
         public IReadOnlyList<ResidentAgent> Agents => _agents;
 
+        /// <summary>
+        /// Initialize with definitions and planet before Start() runs.
+        /// Call this from code that creates the manager at runtime.
+        /// </summary>
+        public void Initialize(ResidentDefinition[] definitions, PlanetBody targetPlanet)
+        {
+            residentDefinitions = definitions;
+            planet = targetPlanet;
+        }
+
         void Start()
         {
             if (planet == null)
@@ -51,14 +61,7 @@ namespace Asteria.Residents
                 col.height = 2f;
                 col.radius = 0.35f;
 
-                // Color the resident
-                var renderer = go.GetComponent<MeshRenderer>();
-                Shader shader = Shader.Find("Universal Render Pipeline/Lit");
-                if (shader == null) shader = Shader.Find("Sprites/Default");
-                Material mat = new(shader);
-                if (mat.HasProperty("_BaseColor")) mat.SetColor("_BaseColor", def.bodyColor);
-                mat.color = def.bodyColor;
-                renderer.sharedMaterial = mat;
+                MaterialHelper.ApplyColor(go.GetComponent<MeshRenderer>(), def.bodyColor);
 
                 // Add agent
                 var agent = go.AddComponent<ResidentAgent>();

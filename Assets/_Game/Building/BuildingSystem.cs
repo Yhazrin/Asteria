@@ -109,14 +109,7 @@ namespace Asteria.Building
             go.transform.localScale = new Vector3(3f, 2f, 3f);
             go.transform.localRotation = Quaternion.Euler(0f, state.RotationAngle, 0f);
 
-            var renderer = go.GetComponent<MeshRenderer>();
-            Shader shader = Shader.Find("Universal Render Pipeline/Lit");
-            if (shader == null) shader = Shader.Find("Sprites/Default");
-            Material mat = new(shader);
-            Color c = new(0.75f, 0.7f, 0.65f);
-            if (mat.HasProperty("_BaseColor")) mat.SetColor("_BaseColor", c);
-            mat.color = c;
-            renderer.sharedMaterial = mat;
+            MaterialHelper.ApplyColor(go.GetComponent<MeshRenderer>(), new Color(0.75f, 0.7f, 0.65f));
         }
     }
 }

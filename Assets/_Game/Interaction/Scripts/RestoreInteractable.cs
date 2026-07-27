@@ -1,4 +1,3 @@
-using Asteria.Data;
 using UnityEngine;
 
 namespace Asteria.Interaction
@@ -11,7 +10,7 @@ namespace Asteria.Interaction
     {
         [SerializeField] string restoreId = "restore_default";
         [SerializeField] string displayName = "修复";
-        [TextArea(1, 3)] public string description = "";
+        [TextArea(1, 3)] [SerializeField] string description = "";
         [SerializeField] float baseDuration = 5f;
         [SerializeField] int totalStages = 3;
         [SerializeField] bool oneShot = true;
@@ -19,6 +18,7 @@ namespace Asteria.Interaction
         int _currentStage;
         bool _restored;
         InteractionInstance _activeInstance;
+        MeshRenderer _cachedRenderer;
 
         public string PromptText => _restored ? $"已修复 · {displayName}" : $"按住 E 修复 · {displayName}";
         public bool CanInteract => !_restored;
@@ -26,6 +26,11 @@ namespace Asteria.Interaction
         public float BaseDuration => baseDuration;
         public string RestoreId => restoreId;
         public bool IsRestored => _restored;
+
+        void Awake()
+        {
+            _cachedRenderer = GetComponent<MeshRenderer>();
+        }
 
         public void Interact(InteractionContext context)
         {
@@ -68,13 +73,11 @@ namespace Asteria.Interaction
 
         public void OnTick(InteractionContext context, float progress)
         {
-            // Visual feedback: change color or scale based on progress
-            var renderer = GetComponent<MeshRenderer>();
-            if (renderer != null && renderer.material.HasProperty("_BaseColor"))
+            if (_cachedRenderer != null && _cachedRenderer.material.HasProperty("_BaseColor"))
             {
-                Color baseColor = renderer.material.GetColor("_BaseColor");
+                Color baseColor = _cachedRenderer.material.GetColor("_BaseColor");
                 Color targetColor = new(0.4f, 0.9f, 0.5f);
-                renderer.material.SetColor("_BaseColor", Color.Lerp(baseColor, targetColor, progress));
+                _cachedRenderer.material.SetColor("_BaseColor", Color.Lerp(baseColor, targetColor, progress));
             }
         }
 
@@ -87,11 +90,9 @@ namespace Asteria.Interaction
                 GameHud.ShowToast($"已修复：{displayName}");
                 Debug.Log($"[Asteria] {displayName} fully restored!");
 
-                // Change appearance
-                var renderer = GetComponent<MeshRenderer>();
-                if (renderer != null && renderer.material.HasProperty("_BaseColor"))
+                if (_cachedRenderer != null && _cachedRenderer.material.HasProperty("_BaseColor"))
                 {
-                    renderer.material.SetColor("_BaseColor", new Color(0.3f, 0.85f, 0.4f));
+                    _cachedRenderer.material.SetColor("_BaseColor", new Color(0.3f, 0.85f, 0.4f));
                 }
             }
             else

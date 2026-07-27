@@ -10,7 +10,7 @@ namespace Asteria.Interaction
     {
         [SerializeField] string cooperateId = "cooperate_default";
         [SerializeField] string displayName = "共鸣";
-        [TextArea(1, 3)] public string description = "";
+        [TextArea(1, 3)] [SerializeField] string description = "";
         [SerializeField] float baseDuration = 8f;
         [SerializeField] int requiredPlayers = 2;
         [SerializeField] bool oneShot = true;
@@ -18,6 +18,7 @@ namespace Asteria.Interaction
         bool _completed;
         InteractionInstance _activeInstance;
         int _currentParticipants;
+        MeshRenderer _cachedRenderer;
 
         public string PromptText => _completed ? $"已完成 · {displayName}" : $"需要 {requiredPlayers} 人 · {displayName}";
         public bool CanInteract => !_completed && _currentParticipants < requiredPlayers;
@@ -25,6 +26,11 @@ namespace Asteria.Interaction
         public float BaseDuration => baseDuration;
         public string CooperateId => cooperateId;
         public bool IsCompleted => _completed;
+
+        void Awake()
+        {
+            _cachedRenderer = GetComponent<MeshRenderer>();
+        }
 
         public void Interact(InteractionContext context)
         {
@@ -68,12 +74,10 @@ namespace Asteria.Interaction
 
         public void OnTick(InteractionContext context, float progress)
         {
-            // Visual feedback: glow increases with progress
-            var renderer = GetComponent<MeshRenderer>();
-            if (renderer != null && renderer.material.HasProperty("_EmissionColor"))
+            if (_cachedRenderer != null && _cachedRenderer.material.HasProperty("_EmissionColor"))
             {
                 Color emission = Color.Lerp(Color.black, new Color(0.5f, 0.8f, 1f), progress);
-                renderer.material.SetColor("_EmissionColor", emission);
+                _cachedRenderer.material.SetColor("_EmissionColor", emission);
             }
         }
 

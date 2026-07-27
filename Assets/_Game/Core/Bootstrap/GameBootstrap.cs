@@ -19,6 +19,7 @@ namespace Asteria.Core
 
         SaveService _saveService;
         DiscoveryRepository _discoveryRepository;
+        DiscoveryJournal _subscribedJournal;
         bool _initialized;
 
         public static GameBootstrap Instance => _instance;
@@ -65,9 +66,11 @@ namespace Asteria.Core
 
         void WireDiscoveryJournal()
         {
-            // The DiscoveryJournal singleton will be created on scene load.
-            // We subscribe to its unlock event and persist to the repository.
-            DiscoveryJournal.Instance.DiscoveryUnlocked += OnDiscoveryUnlocked;
+            _subscribedJournal = DiscoveryJournal.Instance;
+            if (_subscribedJournal != null)
+            {
+                _subscribedJournal.DiscoveryUnlocked += OnDiscoveryUnlocked;
+            }
         }
 
         void OnDiscoveryUnlocked(Data.ObserveEntry entry)
@@ -106,10 +109,10 @@ namespace Asteria.Core
         {
             if (_instance == this)
             {
-                DiscoveryJournal journal = FindFirstObjectByType<DiscoveryJournal>();
-                if (journal != null)
+                if (_subscribedJournal != null)
                 {
-                    journal.DiscoveryUnlocked -= OnDiscoveryUnlocked;
+                    _subscribedJournal.DiscoveryUnlocked -= OnDiscoveryUnlocked;
+                    _subscribedJournal = null;
                 }
 
                 _instance = null;

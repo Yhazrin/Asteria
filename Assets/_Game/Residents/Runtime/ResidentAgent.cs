@@ -152,34 +152,50 @@ namespace Asteria.Residents
             }
         }
 
+        // Cached destination lookups to avoid per-schedule GameObject.Find calls.
+        static readonly Dictionary<string, string[]> DestinationSearchNames = new()
+        {
+            { "home", new[] { "ResidentialArea", "Home", "Residence" } },
+            { "plaza", new[] { "Plaza", "Square", "CentralPlaza" } },
+            { "observatory", new[] { "Observatory", "ObservationDeck" } },
+        };
+
+        Transform _fallbackDest;
+
         Transform FindDestination(string tag)
         {
-            // Find objects by name convention
-            string[] searchNames = tag switch
+            if (DestinationSearchNames.TryGetValue(tag, out var searchNames))
             {
-                "home" => new[] { "ResidentialArea", "Home", "Residence" },
-                "plaza" => new[] { "Plaza", "Square", "CentralPlaza" },
-                "observatory" => new[] { "Observatory", "ObservationDeck" },
-                _ => new[] { tag }
-            };
-
-            foreach (string name in searchNames)
+                foreach (string name in searchNames)
+                {
+                    var go = GameObject.Find(name);
+                    if (go != null)
+                    {
+                        return go.transform;
+                    }
+                }
+            }
+            else
             {
-                var go = GameObject.Find(name);
+                var go = GameObject.Find(tag);
                 if (go != null)
                 {
                     return go.transform;
                 }
             }
 
-            // Fallback: random point on planet
+            // Reuse a single fallback transform instead of leaking GameObjects.
             if (_planet != null)
             {
+                if (_fallbackDest == null)
+                {
+                    var fallbackGo = new GameObject($"Resident_{definition?.displayName}_FallbackDest");
+                    _fallbackDest = fallbackGo.transform;
+                }
+
                 Vector3 dir = Random.onUnitSphere;
-                Vector3 pos = _planet.GetPointOnSurface(dir, 1.05f);
-                var fallback = new GameObject($"Dest_{tag}");
-                fallback.transform.position = pos;
-                return fallback.transform;
+                _fallbackDest.position = _planet.GetPointOnSurface(dir, 1.05f);
+                return _fallbackDest;
             }
 
             return null;

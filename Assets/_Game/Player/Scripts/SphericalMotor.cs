@@ -80,15 +80,18 @@ namespace Asteria.Player
             }
         }
 
-        void Update()
+        void Start()
         {
+            // One-time input discovery (not in Update to avoid per-frame scene scan).
             if (_input == null)
             {
-                // Auto-find LegacyInputAdapter on the same GameObject or scene.
                 _input = GetComponent<IPlayerInputSource>()
                          ?? FindFirstObjectByType<LegacyInputAdapter>();
             }
+        }
 
+        void Update()
+        {
             if (_input != null ? _input.JumpPressed : Input.GetButtonDown("Jump"))
             {
                 _jumpRequested = true;

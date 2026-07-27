@@ -1,0 +1,25 @@
+{
+    "name": "Asteria.GameFlow",
+    "rootNamespace": "Asteria.Core",
+    "references": [
+        "Asteria.Core",
+        "Asteria.Data",
+        "Asteria.Interaction",
+        "Asteria.Planet",
+        "Asteria.Player",
+        "Asteria.Residents",
+        "Asteria.Expedition",
+        "Asteria.Persistence",
+        "Asteria.Building",
+        "Asteria.Multiplayer"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

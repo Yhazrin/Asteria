@@ -1,13 +1,7 @@
 {
     "name": "Asteria.Core",
     "rootNamespace": "Asteria",
-    "references": [
-        "Asteria.Data",
-        "Asteria.Interaction",
-        "Asteria.Persistence",
-        "Asteria.Residents",
-        "Asteria.Expedition"
-    ],
+    "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

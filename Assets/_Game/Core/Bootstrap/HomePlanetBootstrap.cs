@@ -72,14 +72,7 @@ namespace Asteria.Core
             obs.transform.localScale = new Vector3(6f, 12f, 6f);
             obs.transform.up = dir;
 
-            var renderer = obs.GetComponent<MeshRenderer>();
-            Shader shader = Shader.Find("Universal Render Pipeline/Lit");
-            if (shader == null) shader = Shader.Find("Sprites/Default");
-            Material mat = new(shader);
-            Color c = new(0.75f, 0.85f, 0.95f);
-            if (mat.HasProperty("_BaseColor")) mat.SetColor("_BaseColor", c);
-            mat.color = c;
-            renderer.sharedMaterial = mat;
+            MaterialHelper.ApplyColor(obs.GetComponent<MeshRenderer>(), new Color(0.75f, 0.85f, 0.95f));
 
             obs.GetComponent<Collider>().isTrigger = true;
 
@@ -112,14 +105,7 @@ namespace Asteria.Core
             beacon.transform.localScale = new Vector3(3f, 8f, 3f);
             beacon.transform.up = dir;
 
-            var renderer = beacon.GetComponent<MeshRenderer>();
-            Shader shader = Shader.Find("Universal Render Pipeline/Lit");
-            if (shader == null) shader = Shader.Find("Sprites/Default");
-            Material mat = new(shader);
-            Color c = new(0.95f, 0.82f, 0.42f);
-            if (mat.HasProperty("_BaseColor")) mat.SetColor("_BaseColor", c);
-            mat.color = c;
-            renderer.sharedMaterial = mat;
+            MaterialHelper.ApplyColor(beacon.GetComponent<MeshRenderer>(), new Color(0.95f, 0.82f, 0.42f));
 
             beacon.GetComponent<Collider>().isTrigger = true;
 
@@ -150,14 +136,7 @@ namespace Asteria.Core
             marker.transform.localScale = new Vector3(4f, 0.5f, 4f);
             marker.GetComponent<Collider>().isTrigger = true;
 
-            var renderer = marker.GetComponent<MeshRenderer>();
-            Shader shader = Shader.Find("Universal Render Pipeline/Lit");
-            if (shader == null) shader = Shader.Find("Sprites/Default");
-            Material mat = new(shader);
-            Color c = new(0.85f, 0.78f, 0.7f);
-            if (mat.HasProperty("_BaseColor")) mat.SetColor("_BaseColor", c);
-            mat.color = c;
-            renderer.sharedMaterial = mat;
+            MaterialHelper.ApplyColor(marker.GetComponent<MeshRenderer>(), new Color(0.85f, 0.78f, 0.7f));
         }
 
         void CreatePlaza(PlanetBody planet)
@@ -176,14 +155,7 @@ namespace Asteria.Core
             marker.transform.localScale = new Vector3(6f, 0.3f, 6f);
             marker.GetComponent<Collider>().isTrigger = true;
 
-            var renderer = marker.GetComponent<MeshRenderer>();
-            Shader shader = Shader.Find("Universal Render Pipeline/Lit");
-            if (shader == null) shader = Shader.Find("Sprites/Default");
-            Material mat = new(shader);
-            Color c = new(0.9f, 0.85f, 0.75f);
-            if (mat.HasProperty("_BaseColor")) mat.SetColor("_BaseColor", c);
-            mat.color = c;
-            renderer.sharedMaterial = mat;
+            MaterialHelper.ApplyColor(marker.GetComponent<MeshRenderer>(), new Color(0.9f, 0.85f, 0.75f));
         }
 
         void SpawnResidents(PlanetBody planet)
@@ -216,15 +188,7 @@ namespace Asteria.Core
             // Create ResidentManager
             GameObject managerGo = new GameObject("ResidentManager");
             var manager = managerGo.AddComponent<ResidentManager>();
-
-            // Use reflection to set the private serialized fields
-            var defsField = typeof(ResidentManager).GetField("residentDefinitions",
-                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-            defsField?.SetValue(manager, new[] { defA, defB });
-
-            var planetField = typeof(ResidentManager).GetField("planet",
-                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-            planetField?.SetValue(manager, planet);
+            manager.Initialize(new[] { defA, defB }, planet);
         }
 
         void CreateHomePlayer(PlanetBody planet)
