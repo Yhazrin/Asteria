@@ -1,6 +1,6 @@
-# Asteria — 如何运行（当前切片）
+# Asteria — 如何运行
 
-## 打开
+## 快速开始
 
 ### 使用 Unity CLI
 
@@ -19,13 +19,30 @@ unity open D:\project\Asteria
 
 用 Unity Hub / Editor **6000.5.5f1** 打开工程。
 
-场景：
+## Milestone B 场景设置
 
-```
-Assets/_Game/Planet/Scenes/SphereMoveDemo.unity
-```
+首次打开项目后，运行场景设置工具：
 
-按 **Play**。
+1. 菜单：`Asteria → Setup Milestone B Scenes`
+2. 这会创建 `Bootstrap` 和 `HomePlanet` 场景
+3. Build Settings 会自动更新
+
+## 运行流程
+
+### 方式一：完整流程（推荐）
+
+1. 打开 `Assets/_Game/Core/Scenes/Bootstrap.unity`
+2. 按 **Play**
+3. GameBootstrap 会自动加载 HomePlanet 场景
+4. 在家园中与远征信标互动（按 E）进入远征
+5. 在远征中与风铃石互动（按 E）记录发现
+6. 与返回家园信标互动（按 E）返回家园
+
+### 方式二：单场景测试
+
+1. 打开 `Assets/_Game/Planet/Scenes/SphereMoveDemo.unity`
+2. 按 **Play**
+3. 可直接测试球面移动和 Observe
 
 ## 操作
 
