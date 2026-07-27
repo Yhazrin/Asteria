@@ -140,12 +140,12 @@
 
 ### 系统
 
-- [ ] `InteractionInstance` 状态机
-- [ ] Restore 多阶段交互
-- [ ] PressureDefinition 与事件导演最小版
-- [ ] 受寒/失衡中的一个状态
-- [ ] 临时工具放置与上限
-- [ ] 远征检查点
+- [x] `InteractionInstance` 状态机
+- [x] Restore 多阶段交互
+- [x] PressureDefinition 与事件导演最小版
+- [x] 受寒/失衡中的一个状态
+- [x] 临时工具放置与上限
+- [x] 远征检查点
 
 ### 验收
 
@@ -169,11 +169,11 @@
 
 ### 系统
 
-- [ ] BuildAnchor
-- [ ] FacilityDefinition / FacilityState
-- [ ] 预览、旋转、确认、撤销
-- [ ] 权限接口，为联机预留
-- [ ] 设施使用点和居民预约
+- [x] BuildAnchor
+- [x] FacilityDefinition / FacilityState
+- [x] 预览、旋转、确认、撤销
+- [x] 权限接口，为联机预留
+- [x] 设施使用点和居民预约
 
 ### 验收
 
@@ -197,13 +197,13 @@
 
 ### 任务
 
-- [ ] 评估并安装兼容版本 Netcode for GameObjects
-- [ ] Host + Client 玩家同步
-- [ ] 专用球面 Transform 校正（必要时）
-- [ ] Observe/Restore 权威请求
-- [ ] 临时工具同步
-- [ ] 阶段快照与 30 秒重连
-- [ ] 好友房间最小 UI
+- [x] 评估并安装兼容版本 Netcode for GameObjects
+- [x] Host + Client 玩家同步
+- [x] 专用球面 Transform 校正（必要时）
+- [x] Observe/Restore 权威请求
+- [x] 临时工具同步
+- [x] 阶段快照与 30 秒重连
+- [x] 好友房间最小 UI
 
 ### 验收
 
