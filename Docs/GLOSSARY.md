@@ -17,7 +17,13 @@
 **Archetype / Planet Archetype**
 星球原型。远征星球的基础类型定义，包含地形、生态区、POI 槽位和事件牌组。首版只有"风之草原"。
 
+**AsteriaConstants**
+项目常量类。包含场景名、着色器名、魔法数字等共享常量，避免硬编码字符串散落各文件。
+
 ## B
+
+**BuildingSystem**
+建设系统。管理锚点注册、设施建造/拆除和视觉呈现的运行时组件。
 
 **Biome / BiomeTag**
 生态区/生态标签。星球表面的功能区域划分，如 Wind（风之草原）、Mist（雾声森林）等。
@@ -41,6 +47,12 @@
 
 **Core Gameplay Loop**
 核心玩法循环。每分钟、每局、长期三层循环结构。
+
+**DefaultContentFactory**
+默认内容工厂。创建所有 Alpha 内容定义（风之草原、世界事件、工具、社会事件）的静态类。
+
+**DefaultContentRegistry**
+默认内容注册表。持有所有默认内容定义的 MonoBehaviour，跨场景持久化。
 
 ## D
 
@@ -78,6 +90,9 @@
 **Facility / FacilityDefinition**
 设施/设施定义。家园中的可建造建筑，如观测台、共享厨房等。
 
+**FacilityState**
+设施运行时状态。记录设施安装位置、旋转角度等运行时数据，用于存档。
+
 **FollowUpSeed**
 后续种子。事件完成后的后续事件触发器。
 
@@ -85,6 +100,9 @@
 
 **GameBootstrap**
 游戏启动器。负责初始化游戏系统的组合根。
+
+**GameClock**
+游戏时钟。追踪游戏内天数和时间的 IGameClock 实现。
 
 ## H
 
@@ -102,10 +120,16 @@
 **InteractionDetector**
 交互检测器。检测玩家附近可交互对象的组件。
 
+**InteractionInstance**
+交互实例。长时间交互（Restore、Cooperate）的状态机管理器。
+
 **InventorySlotDTO**
 背包槽 DTO。玩家背包中的物品槽位数据。
 
 ## M
+
+**MaterialHelper**
+材质工具类。提供共享的 URP 材质创建和颜色应用方法，消除重复代码。
 
 **Memory / MemoryRecord**
 记忆/记忆记录。居民或玩家经历的重要事件记录。
@@ -143,6 +167,9 @@ Unity 的网络同步框架。
 **Persistence / Persist**
 持久化。将游戏状态保存到磁盘。
 
+**PlacedTool**
+放置工具。远征中放置的临时工具（信标、暖光灯等），有数量限制和生命周期。
+
 **Personality / PersonalityState**
 性格/性格状态。居民的 5 维连续性格模型（Sociability、Curiosity、Warmth、Order、Boldness）。
 
@@ -167,6 +194,9 @@ Unity 的网络同步框架。
 
 **Relationship / RelationshipEdge**
 关系/关系边。两居民之间的多维度关系数据。
+
+**RelationshipService**
+关系服务。管理居民间关系边的 IRelationshipService 实现。
 
 **Resident / ResidentDefinition**
 星友/居民/居民定义。家园中的自主生活角色。
@@ -199,6 +229,9 @@ Unity 的数据容器资产，用于定义静态内容。
 **Tool / ToolDefinition**
 工具/工具定义。玩家携带的主动工具，如共鸣镜、暖光灯等。
 
+**ToolPlacementSystem**
+工具放置系统。管理远征中临时工具的放置、数量限制和生命周期。
+
 **Trace / TraceLimit**
 痕迹/痕迹上限。玩家在远征中放置的临时工具数量限制。
 
@@ -219,6 +252,9 @@ Unity 通用渲染管线。
 
 **WorldEvent**
 世界事件。远征中由事件导演触发的环境事件。
+
+**WorldStateService**
+世界状态服务。追踪当前天气、生态区和压力状态的 IWorldStateService 实现。
 
 ## 中文术语对照
 
