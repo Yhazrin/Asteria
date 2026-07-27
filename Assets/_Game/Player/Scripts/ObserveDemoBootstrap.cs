@@ -1,3 +1,4 @@
+using Asteria.Core;
 using Asteria.Data;
 using Asteria.Interaction;
 using Asteria.Planet;
@@ -118,7 +119,46 @@ namespace Asteria.Player
             ObserveInteractable observe = poi.AddComponent<ObserveInteractable>();
             observe.Entry = entry;
 
+            // Add return-home beacon (opposite side of planet)
+            CreateReturnHomeBeacon(planet);
+
             Debug.Log("[Asteria] Observe slice ensured (runtime). Walk toward the bright stone and press E.");
+        }
+
+        static void CreateReturnHomeBeacon(PlanetBody planet)
+        {
+            if (FindFirstObjectByType<ReturnHomeInteractable>() != null)
+            {
+                return;
+            }
+
+            Vector3 dir = (-Vector3.forward + Vector3.right * 0.3f).normalized;
+            Vector3 pos = planet.GetPointOnSurface(dir, 2f);
+
+            GameObject beacon = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
+            beacon.name = "ReturnHomeBeacon";
+            beacon.transform.position = pos;
+            beacon.transform.localScale = new Vector3(3f, 8f, 3f);
+            beacon.transform.up = dir;
+
+            var renderer = beacon.GetComponent<MeshRenderer>();
+            Shader shader = Shader.Find("Universal Render Pipeline/Lit");
+            if (shader == null) shader = Shader.Find("Sprites/Default");
+            Material mat = new(shader);
+            Color c = new(0.42f, 0.75f, 0.95f);
+            if (mat.HasProperty("_BaseColor")) mat.SetColor("_BaseColor", c);
+            mat.color = c;
+            renderer.sharedMaterial = mat;
+
+            beacon.GetComponent<Collider>().isTrigger = true;
+
+            var triggerGo = new GameObject("Trigger");
+            triggerGo.transform.SetParent(beacon.transform, false);
+            SphereCollider trigger = triggerGo.AddComponent<SphereCollider>();
+            trigger.isTrigger = true;
+            trigger.radius = 1.5f;
+
+            beacon.AddComponent<ReturnHomeInteractable>();
         }
 
         static Material CreatePoiMaterial()
