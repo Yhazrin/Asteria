@@ -2,11 +2,22 @@
 
 ## 打开
 
+### 使用 Unity CLI
+
 ```bash
-unity open /Users/yanghaoze/Desktop/PROJECT/Asteria
+# 注册项目到 Unity Hub
+unity projects add D:\project\Asteria
+
+# 查看项目信息
+unity projects info D:\project\Asteria
+
+# 打开项目（需要已安装 Unity 6000.5.5f1）
+unity open D:\project\Asteria
 ```
 
-或用 Unity Hub / Editor **6000.5.5f1** 打开工程。
+### 使用 Unity Hub / Editor
+
+用 Unity Hub / Editor **6000.5.5f1** 打开工程。
 
 场景：
 
