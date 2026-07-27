@@ -45,27 +45,37 @@
 
 ## 3. 当前工程事实
 
-当前 `main` 基线已经具备：
+当前 `main` 基线已具备（102 C# 文件，~9000 行）：
 
-- `PlanetBody`、`SphericalGravityBody`、`SphericalMotor`、手写球面第三人称相机
-- `SphereMoveDemo` 可运行场景
-- 球面装饰散布、信标与多个 Observe 兴趣点
-- `IInteractable`、`InteractionDetector`、`ObserveInteractable`
-- `DiscoveryJournal` 的内存记录原型
-- `ObserveEntry`、`PlayerMotorConfig`、`TraceLimitsConfig` 等 ScriptableObject
-- 简单 HUD 与 Editor Bootstrap/Upgrade 工具
+**核心系统（已完成）：**
+- 球面重力、移动、相机、Observe 交互
+- 持久化存档（JSON + 原子写入 + 备份 + 迁移）
+- 家园 ↔ 远征场景流（Bootstrap → HomePlanet → SphereMoveDemo）
+- 星友居民模拟（6 名居民，5 维性格，自主互动，记忆系统）
+- 事件型轻生存（压力状态、事件导演、工具放置）
+- 固定节点式建设（锚点、设施定义、建造系统）
+- 联机接口抽象（ISessionAuthority，Local/Network 适配器）
+- Cooperate 多人同步交互
 
-当前尚未具备：
+**内容（已完成）：**
+- 13 个 ScriptableObject 内容定义
+- 8 个服务接口 + 6 个实现
+- 风之草原默认内容（8 个世界事件、3 个工具、6 个社会事件、6 个愿望）
+- 6 名默认居民 + 4 张共同回忆卡
 
-- 持久化存档
-- 家园星球与远征星球切换
-- 星友居民模拟
-- 轻生存事件
-- 固定节点式建设
-- 正式联机运行时
-- 正式角色、美术、动画、音频与 UI
+**测试（已完成）：**
+- 14 个测试文件（11 EditMode + 3 PlayMode）
+- 覆盖球面数学、性格评分、存档迁移、内容标签、场景流、居民行为
 
-因此，任何任务都应从现有 Observe 切片继续演进，而不是重新创建 Unity 项目或重写球面移动核心。
+**Editor 工具（已完成）：**
+- 11 个 Editor 工具（Bootstrap、Upgrade、Validate、Debug、Generate）
+
+**尚未具备：**
+- 正式美术、动画、音频与 UI
+- 完整 Netcode 运行时集成
+- 正式角色外观系统
+
+因此，任何任务都应从现有切片继续演进，而不是重新创建 Unity 项目或重写球面移动核心。
 
 ## 4. 需求变更流程
 

@@ -1,7 +1,8 @@
 # Asteria — 开发路线图 V2
 
 > 状态：Active  
-> 基线：当前 `SphereMoveDemo` 已具备球面移动、散布、Observe 和内存图鉴。
+> 基线：Milestones A–I 全部完成。102 C# 文件，~9000 行代码，14 个测试文件。  
+> 下一步：Unity Editor 实机测试、正式美术/音频/UI 集成、Netcode 运行时验证。
 
 ## 0. 路线图原则
 
