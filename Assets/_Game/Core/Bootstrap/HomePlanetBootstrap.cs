@@ -1,6 +1,7 @@
 using Asteria.Interaction;
 using Asteria.Persistence;
 using Asteria.Planet;
+using Asteria.Residents;
 using UnityEngine;
 
 namespace Asteria.Core
@@ -42,11 +43,20 @@ namespace Asteria.Core
             // Create expedition departure beacon
             CreateDepartureBeacon(planet);
 
+            // Create residential area marker
+            CreateResidentialArea(planet);
+
+            // Create plaza marker
+            CreatePlaza(planet);
+
             // Create a simple player if not present
             if (FindFirstObjectByType<Player.SphericalGravityBody>() == null)
             {
                 CreateHomePlayer(planet);
             }
+
+            // Spawn residents
+            SpawnResidents(planet);
 
             Debug.Log("[Asteria] Home planet built.");
         }
@@ -121,6 +131,100 @@ namespace Asteria.Core
             entry.promptText = "按 E 出发远征";
 
             var interactable = beacon.AddComponent<DepartureBeaconInteractable>();
+        }
+
+        void CreateResidentialArea(PlanetBody planet)
+        {
+            Vector3 dir = (Vector3.forward * 0.5f + Vector3.up * 0.8f).normalized;
+            Vector3 pos = planet.GetPointOnSurface(dir, 0.5f);
+
+            GameObject area = new GameObject("ResidentialArea");
+            area.transform.position = pos;
+            area.transform.up = dir;
+
+            // Visual marker
+            GameObject marker = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
+            marker.name = "ResidenceMarker";
+            marker.transform.SetParent(area.transform, false);
+            marker.transform.localPosition = Vector3.zero;
+            marker.transform.localScale = new Vector3(4f, 0.5f, 4f);
+            marker.GetComponent<Collider>().isTrigger = true;
+
+            var renderer = marker.GetComponent<MeshRenderer>();
+            Shader shader = Shader.Find("Universal Render Pipeline/Lit");
+            if (shader == null) shader = Shader.Find("Sprites/Default");
+            Material mat = new(shader);
+            Color c = new(0.85f, 0.78f, 0.7f);
+            if (mat.HasProperty("_BaseColor")) mat.SetColor("_BaseColor", c);
+            mat.color = c;
+            renderer.sharedMaterial = mat;
+        }
+
+        void CreatePlaza(PlanetBody planet)
+        {
+            Vector3 dir = (Vector3.right * 0.6f + Vector3.up * 0.7f).normalized;
+            Vector3 pos = planet.GetPointOnSurface(dir, 0.5f);
+
+            GameObject plaza = new GameObject("Plaza");
+            plaza.transform.position = pos;
+            plaza.transform.up = dir;
+
+            GameObject marker = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
+            marker.name = "PlazaMarker";
+            marker.transform.SetParent(plaza.transform, false);
+            marker.transform.localPosition = Vector3.zero;
+            marker.transform.localScale = new Vector3(6f, 0.3f, 6f);
+            marker.GetComponent<Collider>().isTrigger = true;
+
+            var renderer = marker.GetComponent<MeshRenderer>();
+            Shader shader = Shader.Find("Universal Render Pipeline/Lit");
+            if (shader == null) shader = Shader.Find("Sprites/Default");
+            Material mat = new(shader);
+            Color c = new(0.9f, 0.85f, 0.75f);
+            if (mat.HasProperty("_BaseColor")) mat.SetColor("_BaseColor", c);
+            mat.color = c;
+            renderer.sharedMaterial = mat;
+        }
+
+        void SpawnResidents(PlanetBody planet)
+        {
+            // Create default resident definitions at runtime
+            var defA = ScriptableObject.CreateInstance<ResidentDefinition>();
+            defA.residentId = "lian";
+            defA.displayName = "莲";
+            defA.pronouns = "she/her";
+            defA.sociability = 0.6f;
+            defA.curiosity = 0.4f;
+            defA.warmth = 0.7f;
+            defA.order = 0.3f;
+            defA.boldness = 0.2f;
+            defA.quirks = new[] { "会给所有植物取名字" };
+            defA.bodyColor = new Color(0.85f, 0.75f, 0.8f);
+
+            var defB = ScriptableObject.CreateInstance<ResidentDefinition>();
+            defB.residentId = "kai";
+            defB.displayName = "凯";
+            defB.pronouns = "he/him";
+            defB.sociability = -0.3f;
+            defB.curiosity = 0.8f;
+            defB.warmth = 0.1f;
+            defB.order = 0.6f;
+            defB.boldness = 0.7f;
+            defB.quirks = new[] { "害怕下坡却喜欢高处" };
+            defB.bodyColor = new Color(0.7f, 0.8f, 0.85f);
+
+            // Create ResidentManager
+            GameObject managerGo = new GameObject("ResidentManager");
+            var manager = managerGo.AddComponent<ResidentManager>();
+
+            // Use reflection to set the private serialized fields
+            var defsField = typeof(ResidentManager).GetField("residentDefinitions",
+                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            defsField?.SetValue(manager, new[] { defA, defB });
+
+            var planetField = typeof(ResidentManager).GetField("planet",
+                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            planetField?.SetValue(manager, planet);
         }
 
         void CreateHomePlayer(PlanetBody planet)

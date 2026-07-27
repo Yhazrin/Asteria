@@ -47,13 +47,13 @@
 
 ### 任务
 
-- [ ] 新建 `Bootstrap` 与 `HomePlanet` 场景
-- [ ] 建立 `GameBootstrap` 组合根
-- [ ] 建立纯 C# 存档 DTO、JSON 存档和 schemaVersion
-- [ ] 将 `DiscoveryJournal` 接入 `IDiscoveryRepository`
-- [ ] 家园放置 1 个观测台锚点
-- [ ] 从家园进入现有远征球，再返回家园
-- [ ] 返回后在观测台展示已发现的风铃石
+- [x] 新建 `Bootstrap` 与 `HomePlanet` 场景
+- [x] 建立 `GameBootstrap` 组合根
+- [x] 建立纯 C# 存档 DTO、JSON 存档和 schemaVersion
+- [x] 将 `DiscoveryJournal` 接入 `IDiscoveryRepository`
+- [x] 家园放置 1 个观测台锚点
+- [x] 从家园进入现有远征球，再返回家园
+- [x] 返回后在观测台展示已发现的风铃石
 
 ### 验收
 
