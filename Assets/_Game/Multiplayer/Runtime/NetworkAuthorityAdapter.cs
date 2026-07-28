@@ -4,56 +4,100 @@ using UnityEngine;
 namespace Asteria.Multiplayer
 {
     /// <summary>
-    /// Network implementation of ISessionAuthority using Netcode for GameObjects.
-    /// This is a placeholder for Milestone G full implementation.
-    /// Requires: com.unity.netcode.gameobjects
+    /// Network implementation of ISessionAuthority.
+    /// Uses NetworkSessionManager, NetworkInteractionAuthority, and NetworkCheckpoint.
     /// </summary>
     public sealed class NetworkAuthorityAdapter : MonoBehaviour, ISessionAuthority
     {
-        // NGO references would go here:
-        // NetworkManager _networkManager;
-        // NetworkObject _playerObject;
+        NetworkSessionManager _sessionManager;
+        NetworkInteractionAuthority _interactionAuthority;
+        NetworkCheckpoint _checkpoint;
 
-        readonly Dictionary<string, bool> _interactionApprovals = new();
-        SessionSnapshot _lastSnapshot;
+        void Awake()
+        {
+            _sessionManager = NetworkSessionManager.Instance;
+            _interactionAuthority = GetComponent<NetworkInteractionAuthority>();
+            _checkpoint = GetComponent<NetworkCheckpoint>();
 
-        public bool IsHost => true; // Placeholder: check NetworkManager.Singleton.IsHost
-        public bool IsConnected => false; // Placeholder: check NetworkManager.Singleton.IsConnectedClient
-        public string LocalPlayerId => "network_player"; // Placeholder: use NetworkManager.Singleton.LocalClientId
+            // Auto-create if missing
+            if (_interactionAuthority == null)
+                _interactionAuthority = gameObject.AddComponent<NetworkInteractionAuthority>();
+            if (_checkpoint == null)
+                _checkpoint = gameObject.AddComponent<NetworkCheckpoint>();
+        }
+
+        public bool IsHost => _sessionManager?.IsHost ?? true;
+        public bool IsConnected => _sessionManager?.IsConnected ?? false;
+        public string LocalPlayerId => _sessionManager?.LocalPlayerId ?? "local";
 
         public bool RequestInteraction(string interactionId, string playerId)
         {
-            if (IsHost)
+            if (_interactionAuthority != null)
             {
-                // Host approves and broadcasts
-                _interactionApprovals[interactionId] = true;
-                BroadcastEvent("interaction_approved", interactionId);
-                return true;
+                return _interactionAuthority.RequestInteraction(interactionId, playerId);
             }
-            else
-            {
-                // Client requests from host
-                // Placeholder: send RPC to host
-                Debug.Log($"[Asteria] Requesting interaction {interactionId} from host...");
-                return false; // Will be approved via callback
-            }
+            return true; // Fallback: approve
         }
 
         public void BroadcastEvent(string eventId, string data)
         {
-            // Placeholder: use NGO ClientRpc or custom message
-            Debug.Log($"[Asteria] Broadcasting: {eventId}");
+            if (_sessionManager != null && _sessionManager.IsConnected)
+            {
+                // In NGO: ClientRpc
+                Debug.Log($"[Network] Broadcasting: {eventId}");
+            }
         }
 
         public SessionSnapshot GetSnapshot()
         {
-            return _lastSnapshot ?? new SessionSnapshot();
+            if (_checkpoint != null)
+            {
+                var cp = _checkpoint.TakeCheckpoint();
+                return new SessionSnapshot
+                {
+                    expeditionId = cp.expeditionId,
+                    phase = "expedition",
+                    elapsedTime = cp.timestamp,
+                    playerIds = System.Array.ConvertAll(cp.playerStates, p => p.playerId),
+                    playerPositions = System.Array.ConvertAll(cp.playerStates, p => p.position),
+                    discoveredIds = cp.discoveryIds
+                };
+            }
+
+            return _sessionManager?.TakeSnapshot() ?? new SessionSnapshot();
         }
 
         public void RestoreFromSnapshot(SessionSnapshot snapshot)
         {
-            _lastSnapshot = snapshot;
-            Debug.Log($"[Asteria] Restored from snapshot: {snapshot.expeditionId}");
+            if (snapshot == null) return;
+
+            _sessionManager?.RestoreFromSnapshot(snapshot);
+
+            // Restore checkpoint
+            if (_checkpoint != null)
+            {
+                var checkpointData = new NetworkCheckpoint.CheckpointData
+                {
+                    expeditionId = snapshot.expeditionId,
+                    timestamp = snapshot.elapsedTime,
+                    playerStates = new NetworkCheckpoint.PlayerStateData[snapshot.playerIds.Length],
+                    discoveryIds = snapshot.discoveredIds
+                };
+
+                for (int i = 0; i < snapshot.playerIds.Length; i++)
+                {
+                    checkpointData.playerStates[i] = new NetworkCheckpoint.PlayerStateData
+                    {
+                        playerId = snapshot.playerIds[i],
+                        position = snapshot.playerPositions[i],
+                        rotation = Quaternion.identity
+                    };
+                }
+
+                _checkpoint.RestoreCheckpoint(checkpointData);
+            }
+
+            Debug.Log($"[Network] Restored from snapshot: {snapshot.expeditionId}");
         }
     }
 }
