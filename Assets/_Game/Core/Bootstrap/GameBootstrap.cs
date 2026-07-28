@@ -2,6 +2,7 @@ using Asteria.Data;
 using Asteria.Interaction;
 using Asteria.Persistence;
 using Asteria.Residents;
+using Asteria.UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -73,11 +74,14 @@ namespace Asteria.Core
             // Ensure default content registry exists
             EnsureDefaultContent();
 
+            // Ensure UI system exists
+            EnsureUISystem();
+
             // Wire DiscoveryJournal to use the repository
             WireDiscoveryJournal();
 
             _initialized = true;
-            Debug.Log("[Asteria] GameBootstrap initialized.");
+            Debug.Log("[Asteria] GameBootstrap initialized with all systems.");
         }
 
         void EnsureDefaultContent()
@@ -87,6 +91,12 @@ namespace Asteria.Core
                 var go = new GameObject("DefaultContentRegistry");
                 go.AddComponent<DefaultContentRegistry>();
             }
+        }
+
+        void EnsureUISystem()
+        {
+            // GameUIRoot will auto-create if needed
+            var uiRoot = GameUIRoot.Instance;
         }
 
         void WireDiscoveryJournal()

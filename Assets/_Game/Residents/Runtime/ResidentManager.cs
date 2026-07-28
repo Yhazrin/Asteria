@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Asteria.Planet;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Asteria.Residents
 {
@@ -66,10 +67,28 @@ namespace Asteria.Residents
                 // Add agent
                 var agent = go.AddComponent<ResidentAgent>();
                 agent.Initialize(def, planet);
+
+                // Add mood bubble
+                var moodBubbleGo = new GameObject("MoodBubble");
+                moodBubbleGo.transform.SetParent(go.transform, false);
+                moodBubbleGo.transform.localPosition = new Vector3(0, 2.5f, 0);
+                var moodRenderer = moodBubbleGo.AddComponent<SpriteRenderer>();
+                moodRenderer.sortingOrder = 10;
+                var moodBubble = moodBubbleGo.AddComponent<ResidentMoodBubble>();
+
+                // Add dialogue bubble
+                var dialogueGo = new GameObject("DialogueBubble");
+                dialogueGo.transform.SetParent(go.transform, false);
+                dialogueGo.transform.localPosition = new Vector3(0, 3f, 0);
+                var dialogueBubble = dialogueGo.AddComponent<ResidentDialogueBubble>();
+
                 _agents.Add(agent);
+
+                // Show initial mood based on personality
+                ShowInitialMood(agent, moodBubble);
             }
 
-            Debug.Log($"[Asteria] Spawned {_agents.Count} residents.");
+            Debug.Log($"[Asteria] Spawned {_agents.Count} residents with mood and dialogue systems.");
         }
 
         void Update()
@@ -92,17 +111,57 @@ namespace Asteria.Residents
                     var a = _agents[i];
                     var b = _agents[j];
 
-                    if (a == null || b == null)
-                    {
-                        continue;
-                    }
+                    if (a == null || b == null) continue;
 
                     float distance = Vector3.Distance(a.transform.position, b.transform.position);
                     if (distance < AsteriaConstants.ResidentInteractionDistance)
                     {
-                        a.TryInteract(b);
+                        bool interacted = a.TryInteract(b);
+                        if (interacted)
+                        {
+                            // Show mood and dialogue for interaction
+                            TriggerInteractionFeedback(a, b);
+                        }
                     }
                 }
+            }
+        }
+
+        void TriggerInteractionFeedback(ResidentAgent a, ResidentAgent b)
+        {
+            // Show mood bubbles
+            var moodA = a.GetComponentInChildren<ResidentMoodBubble>();
+            var moodB = b.GetComponentInChildren<ResidentMoodBubble>();
+
+            if (moodA != null) moodA.ShowMood(ResidentMoodBubble.MoodType.Happy);
+            if (moodB != null) moodB.ShowMood(ResidentMoodBubble.MoodType.Happy);
+
+            // Show dialogue bubbles
+            var dialogueA = a.GetComponentInChildren<ResidentDialogueBubble>();
+            var dialogueB = b.GetComponentInChildren<ResidentDialogueBubble>();
+
+            string[] greetings = { "你好呀！", "今天天气真好~", "好久不见！", "一起走走？", "嘿嘿" };
+            string greeting = greetings[Random.Range(0, greetings.Length)];
+
+            if (dialogueA != null) dialogueA.ShowDialogue(greeting);
+            if (dialogueB != null) dialogueB.ShowDialogue("好呀！");
+        }
+
+        void ShowInitialMood(ResidentAgent agent, ResidentMoodBubble moodBubble)
+        {
+            if (agent.Definition == null) return;
+
+            // Show mood based on personality
+            float warmth = agent.Definition.Warmth;
+            float curiosity = agent.Definition.Curiosity;
+
+            if (warmth > 0.5f)
+            {
+                moodBubble.ShowMood(ResidentMoodBubble.MoodType.Happy);
+            }
+            else if (curiosity > 0.5f)
+            {
+                moodBubble.ShowMood(ResidentMoodBubble.MoodType.Curious);
             }
         }
 

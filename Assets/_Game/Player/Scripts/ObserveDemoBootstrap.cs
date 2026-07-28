@@ -1,7 +1,9 @@
 using Asteria.Core;
 using Asteria.Data;
+using Asteria.Expedition;
 using Asteria.Interaction;
 using Asteria.Planet;
+using Asteria.UI;
 using UnityEngine;
 
 namespace Asteria.Player
@@ -120,6 +122,12 @@ namespace Asteria.Player
             // Add return-home beacon (opposite side of planet)
             CreateReturnHomeBeacon(planet);
 
+            // Setup expedition environment
+            SetupExpeditionEnvironment(planet);
+
+            // Setup expedition UI
+            SetupExpeditionUI(planet);
+
             Debug.Log("[Asteria] Observe slice ensured (runtime). Walk toward the bright stone and press E.");
         }
 
@@ -150,6 +158,112 @@ namespace Asteria.Player
             trigger.radius = 1.5f;
 
             beacon.AddComponent<ReturnHomeInteractable>();
+        }
+
+        static void SetupExpeditionEnvironment(PlanetBody planet)
+        {
+            // Add wind effect for expedition
+            if (FindFirstObjectByType<WindEffect>() == null)
+            {
+                var windGo = new GameObject("ExpeditionWind");
+                var wind = windGo.AddComponent<WindEffect>();
+                wind.SetWindStrength(5f); // Stronger wind for expedition
+            }
+
+            // Add day/night cycle
+            if (FindFirstObjectByType<DayNightCycle>() == null)
+            {
+                var dayNightGo = new GameObject("DayNightCycle");
+                var dayNight = dayNightGo.AddComponent<DayNightCycle>();
+                var clock = GameBootstrap.Instance?.GameClock;
+                if (clock != null) dayNight.SetClock(clock);
+            }
+
+            // Add pressure system
+            if (FindFirstObjectByType<PlayerPressureState>() == null)
+            {
+                var player = FindFirstObjectByType<Player.SphericalGravityBody>();
+                if (player != null)
+                {
+                    player.gameObject.AddComponent<PlayerPressureState>();
+                }
+            }
+
+            // Add event director
+            if (FindFirstObjectByType<EventDirectorMinimal>() == null)
+            {
+                var directorGo = new GameObject("EventDirector");
+                directorGo.AddComponent<EventDirectorMinimal>();
+            }
+
+            // Add tool placement system
+            if (FindFirstObjectByType<ToolPlacementSystem>() == null)
+            {
+                var toolGo = new GameObject("ToolPlacement");
+                toolGo.AddComponent<ToolPlacementSystem>();
+            }
+        }
+
+        static void SetupExpeditionUI(PlanetBody planet)
+        {
+            // Ensure GameUIRoot exists
+            var uiRoot = GameUIRoot.Instance;
+
+            // Add GameUIBridge
+            if (FindFirstObjectByType<GameUIBridge>() == null)
+            {
+                var bridgeGo = new GameObject("GameUIBridge");
+                bridgeGo.AddComponent<GameUIBridge>();
+            }
+
+            // Add compass with POI markers
+            if (FindFirstObjectByType<Compass>() == null)
+            {
+                var compassGo = new GameObject("Compass");
+                var compass = compassGo.AddComponent<Compass>();
+
+                // Register all ObserveInteractable POIs on compass
+                var pois = FindObjectsByType<ObserveInteractable>(FindObjectsSortMode.None);
+                foreach (var poi in pois)
+                {
+                    compass.RegisterMarker(poi.Entry?.id ?? "poi", poi.transform, new Color(1f, 0.8f, 0.3f));
+                }
+
+                // Register return beacon
+                var returnBeacon = FindFirstObjectByType<ReturnHomeInteractable>();
+                if (returnBeacon != null)
+                {
+                    compass.RegisterMarker("return", returnBeacon.transform, new Color(0.3f, 0.8f, 1f));
+                }
+            }
+
+            // Add mini-map
+            if (FindFirstObjectByType<SphericalMiniMap>() == null)
+            {
+                var miniMapGo = new GameObject("MiniMap");
+                var miniMap = miniMapGo.AddComponent<SphericalMiniMap>();
+
+                var pois = FindObjectsByType<ObserveInteractable>(FindObjectsSortMode.None);
+                foreach (var poi in pois)
+                {
+                    miniMap.RegisterMarker(poi.Entry?.id ?? "poi", poi.transform, new Color(1f, 0.8f, 0.3f));
+                }
+            }
+
+            // Add photo mode
+            if (FindFirstObjectByType<PhotoMode>() == null)
+            {
+                var photoGo = new GameObject("PhotoMode");
+                photoGo.AddComponent<PhotoMode>();
+            }
+
+            // Show expedition panel
+            var expeditionPanel = uiRoot.ExpeditionPanel;
+            if (expeditionPanel != null)
+            {
+                expeditionPanel.Show();
+                expeditionPanel.UpdateObjectiveInfo("探索风之草原\n观察风铃石");
+            }
         }
     }
 }

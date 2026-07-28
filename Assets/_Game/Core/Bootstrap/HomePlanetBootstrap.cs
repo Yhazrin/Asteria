@@ -2,6 +2,7 @@ using Asteria.Interaction;
 using Asteria.Persistence;
 using Asteria.Planet;
 using Asteria.Residents;
+using Asteria.UI;
 using UnityEngine;
 
 namespace Asteria.Core
@@ -58,7 +59,13 @@ namespace Asteria.Core
             // Spawn residents
             SpawnResidents(planet);
 
-            Debug.Log("[Asteria] Home planet built.");
+            // Setup environment systems
+            SetupEnvironment(planet);
+
+            // Setup UI systems
+            SetupUI(planet);
+
+            Debug.Log("[Asteria] Home planet built with all systems.");
         }
 
         void CreateObservatory(PlanetBody planet)
@@ -174,6 +181,77 @@ namespace Asteria.Core
             GameObject managerGo = new GameObject("ResidentManager");
             var manager = managerGo.AddComponent<ResidentManager>();
             manager.Initialize(new[] { defA, defB }, planet);
+        }
+
+        void SetupEnvironment(PlanetBody planet)
+        {
+            // Add day/night cycle
+            if (FindFirstObjectByType<DayNightCycle>() == null)
+            {
+                var dayNightGo = new GameObject("DayNightCycle");
+                var dayNight = dayNightGo.AddComponent<DayNightCycle>();
+
+                // Wire to game clock
+                var clock = GameBootstrap.Instance?.GameClock;
+                if (clock != null)
+                {
+                    dayNight.SetClock(clock);
+                }
+            }
+
+            // Add ambient wind (gentle for home planet)
+            if (FindFirstObjectByType<WindEffect>() == null)
+            {
+                var windGo = new GameObject("HomeWind");
+                var wind = windGo.AddComponent<WindEffect>();
+                wind.SetWindStrength(2f); // Gentle home wind
+            }
+        }
+
+        void SetupUI(PlanetBody planet)
+        {
+            // Ensure GameUIRoot exists
+            var uiRoot = GameUIRoot.Instance;
+
+            // Add GameUIBridge to wire events
+            if (FindFirstObjectByType<GameUIBridge>() == null)
+            {
+                var bridgeGo = new GameObject("GameUIBridge");
+                bridgeGo.AddComponent<GameUIBridge>();
+            }
+
+            // Add compass
+            if (FindFirstObjectByType<Compass>() == null)
+            {
+                var compassGo = new GameObject("Compass");
+                var compass = compassGo.AddComponent<Compass>();
+
+                // Register key locations on compass
+                var observatory = GameObject.Find("Observatory");
+                var departure = GameObject.Find("DepartureBeacon");
+                if (observatory != null) compass.RegisterMarker("observatory", observatory.transform, new Color(0.4f, 0.7f, 1f));
+                if (departure != null) compass.RegisterMarker("departure", departure.transform, new Color(1f, 0.8f, 0.3f));
+            }
+
+            // Add mini-map
+            if (FindFirstObjectByType<SphericalMiniMap>() == null)
+            {
+                var miniMapGo = new GameObject("MiniMap");
+                var miniMap = miniMapGo.AddComponent<SphericalMiniMap>();
+
+                // Register key locations
+                var observatory = GameObject.Find("Observatory");
+                var departure = GameObject.Find("DepartureBeacon");
+                if (observatory != null) miniMap.RegisterMarker("observatory", observatory.transform, new Color(0.4f, 0.7f, 1f));
+                if (departure != null) miniMap.RegisterMarker("departure", departure.transform, new Color(1f, 0.8f, 0.3f));
+            }
+
+            // Add photo mode
+            if (FindFirstObjectByType<PhotoMode>() == null)
+            {
+                var photoGo = new GameObject("PhotoMode");
+                photoGo.AddComponent<PhotoMode>();
+            }
         }
 
         void CreateHomePlayer(PlanetBody planet)
