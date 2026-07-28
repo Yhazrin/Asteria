@@ -2,6 +2,7 @@
     "name": "Asteria.UI",
     "rootNamespace": "Asteria.UI",
     "references": [
+        "Asteria.Core",
         "Asteria.Data",
         "Asteria.Interaction"
     ],
