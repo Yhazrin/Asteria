@@ -13,27 +13,25 @@ namespace Asteria.Interaction
         [SerializeField] bool oneShot = true;
 
         bool _observed;
+        bool _cachedHasEntry;
+        bool _cacheValid;
 
         public ObserveEntry Entry
         {
             get => entry;
-            set => entry = value;
+            set
+            {
+                entry = value;
+                _cacheValid = false;
+            }
         }
 
         public string PromptText
         {
             get
             {
-                if (entry == null)
-                {
-                    return "按 E 观察";
-                }
-
-                if (_observed || DiscoveryJournal.Instance.Has(entry))
-                {
-                    return $"已观察 · {entry.displayName}";
-                }
-
+                if (entry == null) return "按 E 观察";
+                if (IsDiscovered()) return $"已观察 · {entry.displayName}";
                 return string.IsNullOrWhiteSpace(entry.promptText)
                     ? $"按 E 观察 · {entry.displayName}"
                     : entry.promptText;
@@ -44,31 +42,32 @@ namespace Asteria.Interaction
         {
             get
             {
-                if (entry == null)
-                {
-                    return false;
-                }
-
-                if (oneShot && (_observed || DiscoveryJournal.Instance.Has(entry)))
-                {
-                    return false;
-                }
-
+                if (entry == null) return false;
+                if (oneShot && IsDiscovered()) return false;
                 return true;
             }
         }
 
         public float FocusDistance => focusDistance;
 
+        bool IsDiscovered()
+        {
+            if (_observed) return true;
+            if (!_cacheValid)
+            {
+                _cachedHasEntry = DiscoveryJournal.Instance.Has(entry);
+                _cacheValid = true;
+            }
+            return _cachedHasEntry;
+        }
+
         public void Interact(InteractionContext context)
         {
-            if (!CanInteract)
-            {
-                return;
-            }
+            if (!CanInteract) return;
 
             bool unlocked = DiscoveryJournal.Instance.TryUnlock(entry);
             _observed = true;
+            _cacheValid = false;
 
             if (unlocked)
             {
