@@ -1,6 +1,7 @@
 using Asteria.Data;
 using Asteria.Interaction;
 using Asteria.Persistence;
+using Asteria.Planet.Creatures;
 using Asteria.Residents;
 using Asteria.UI;
 using UnityEngine;
@@ -90,6 +91,13 @@ namespace Asteria.Core
             {
                 var go = new GameObject("DefaultContentRegistry");
                 go.AddComponent<DefaultContentRegistry>();
+            }
+
+            // Planet codex persists across scenes
+            if (PlanetCodex.Instance == null)
+            {
+                var codexGo = new GameObject("PlanetCodex");
+                codexGo.AddComponent<PlanetCodex>();
             }
         }
 

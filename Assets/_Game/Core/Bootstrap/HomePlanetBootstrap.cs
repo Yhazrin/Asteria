@@ -1,6 +1,10 @@
+using Asteria.Data;
 using Asteria.Interaction;
 using Asteria.Persistence;
 using Asteria.Planet;
+using Asteria.Planet.Atmosphere;
+using Asteria.Planet.Creatures;
+using Asteria.Planet.Weather;
 using Asteria.Residents;
 using Asteria.UI;
 using UnityEngine;
@@ -185,26 +189,51 @@ namespace Asteria.Core
 
         void SetupEnvironment(PlanetBody planet)
         {
-            // Add day/night cycle
+            // Day/night cycle
             if (FindFirstObjectByType<DayNightCycle>() == null)
             {
                 var dayNightGo = new GameObject("DayNightCycle");
                 var dayNight = dayNightGo.AddComponent<DayNightCycle>();
-
-                // Wire to game clock
                 var clock = GameBootstrap.Instance?.GameClock;
-                if (clock != null)
-                {
-                    dayNight.SetClock(clock);
-                }
+                if (clock != null) dayNight.SetClock(clock);
             }
 
-            // Add ambient wind (gentle for home planet)
+            // Wind (gentle for home)
             if (FindFirstObjectByType<WindEffect>() == null)
             {
                 var windGo = new GameObject("HomeWind");
                 var wind = windGo.AddComponent<WindEffect>();
-                wind.SetWindStrength(2f); // Gentle home wind
+                wind.SetWindStrength(2f);
+            }
+
+            // Atmosphere renderer
+            if (FindFirstObjectByType<AtmosphereRenderer>() == null)
+            {
+                var atmosGo = new GameObject("Atmosphere");
+                var atmos = atmosGo.AddComponent<AtmosphereRenderer>();
+            }
+
+            // Weather system (calm for home)
+            if (FindFirstObjectByType<WeatherSystem>() == null)
+            {
+                var weatherGo = new GameObject("Weather");
+                var weather = weatherGo.AddComponent<WeatherSystem>();
+                weather.SetWeather(WeatherType.Clear, 0.3f);
+            }
+
+            // Creature spawner (few creatures on home)
+            if (FindFirstObjectByType<CreatureSpawner>() == null)
+            {
+                var creatureGo = new GameObject("CreatureSpawner");
+                var spawner = creatureGo.AddComponent<CreatureSpawner>();
+            }
+
+            // Planet codex
+            if (PlanetCodex.Instance == null)
+            {
+                var codexGo = new GameObject("PlanetCodex");
+                codexGo.AddComponent<PlanetCodex>();
+                PlanetCodex.Instance.Discover("planet.home");
             }
         }
 

@@ -3,6 +3,10 @@ using Asteria.Data;
 using Asteria.Expedition;
 using Asteria.Interaction;
 using Asteria.Planet;
+using Asteria.Planet.Atmosphere;
+using Asteria.Planet.Creatures;
+using Asteria.Planet.Generation;
+using Asteria.Planet.Weather;
 using Asteria.UI;
 using UnityEngine;
 
@@ -162,15 +166,15 @@ namespace Asteria.Player
 
         static void SetupExpeditionEnvironment(PlanetBody planet)
         {
-            // Add wind effect for expedition
+            // Wind (stronger for expedition)
             if (FindFirstObjectByType<WindEffect>() == null)
             {
                 var windGo = new GameObject("ExpeditionWind");
                 var wind = windGo.AddComponent<WindEffect>();
-                wind.SetWindStrength(5f); // Stronger wind for expedition
+                wind.SetWindStrength(5f);
             }
 
-            // Add day/night cycle
+            // Day/night cycle
             if (FindFirstObjectByType<DayNightCycle>() == null)
             {
                 var dayNightGo = new GameObject("DayNightCycle");
@@ -179,28 +183,60 @@ namespace Asteria.Player
                 if (clock != null) dayNight.SetClock(clock);
             }
 
-            // Add pressure system
+            // Atmosphere renderer
+            if (FindFirstObjectByType<AtmosphereRenderer>() == null)
+            {
+                var atmosGo = new GameObject("Atmosphere");
+                atmosGo.AddComponent<AtmosphereRenderer>();
+            }
+
+            // Weather system (dynamic for expedition)
+            if (FindFirstObjectByType<WeatherSystem>() == null)
+            {
+                var weatherGo = new GameObject("Weather");
+                var weather = weatherGo.AddComponent<WeatherSystem>();
+                weather.SetWeather(WeatherType.Cloudy, 0.5f);
+            }
+
+            // Creature spawner
+            if (FindFirstObjectByType<CreatureSpawner>() == null)
+            {
+                var creatureGo = new GameObject("CreatureSpawner");
+                creatureGo.AddComponent<CreatureSpawner>();
+            }
+
+            // Space landing sequence
+            if (FindFirstObjectByType<SpaceLandingSequence>() == null)
+            {
+                var landingGo = new GameObject("SpaceLanding");
+                var landing = landingGo.AddComponent<SpaceLandingSequence>();
+            }
+
+            // Pressure system
             if (FindFirstObjectByType<PlayerPressureState>() == null)
             {
                 var player = FindFirstObjectByType<Player.SphericalGravityBody>();
-                if (player != null)
-                {
-                    player.gameObject.AddComponent<PlayerPressureState>();
-                }
+                if (player != null) player.gameObject.AddComponent<PlayerPressureState>();
             }
 
-            // Add event director
+            // Event director
             if (FindFirstObjectByType<EventDirectorMinimal>() == null)
             {
                 var directorGo = new GameObject("EventDirector");
                 directorGo.AddComponent<EventDirectorMinimal>();
             }
 
-            // Add tool placement system
+            // Tool placement
             if (FindFirstObjectByType<ToolPlacementSystem>() == null)
             {
                 var toolGo = new GameObject("ToolPlacement");
                 toolGo.AddComponent<ToolPlacementSystem>();
+            }
+
+            // Planet codex - discover expedition planet
+            if (PlanetCodex.Instance != null)
+            {
+                PlanetCodex.Instance.Discover("planet.wind_grassland");
             }
         }
 
