@@ -1,0 +1,24 @@
+using UnityEngine;
+
+namespace Asteria.Data
+{
+    /// <summary>
+    /// LOD configuration database for the game.
+    /// Contains all LOD parameters.
+    /// </summary>
+    [CreateAssetMenu(menuName = "Asteria/LOD Config Database")]
+    public sealed class LODConfigDatabase : ScriptableObject
+    {
+        [Header("LOD Settings")]
+        public int maxLODLevels = 4;
+        public float[] lodDistances = { 100f, 200f, 400f, 800f };
+        public float lodBias = 1f;
+
+        [Header("LOD Resolutions")]
+        public int[] lodResolutions = { 128, 64, 32, 16 };
+
+        [Header("Transitions")]
+        public float lodTransitionSpeed = 2f;
+        public bool enableLODTransitions = true;
+    }
+}
