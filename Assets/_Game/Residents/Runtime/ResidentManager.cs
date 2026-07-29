@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Asteria.Art;
 using Asteria.Planet;
 using UnityEngine;
 using UnityEngine.UI;
@@ -50,19 +51,18 @@ namespace Asteria.Residents
 
             foreach (var def in residentDefinitions)
             {
-                if (def == null)
-                {
-                    continue;
-                }
+                if (def == null) continue;
 
-                var go = GameObject.CreatePrimitive(PrimitiveType.Capsule);
+                // Use procedural creature mesh instead of capsule
+                Vector3 spawnDir = Random.onUnitSphere;
+                Vector3 spawnPos = planet.GetPointOnSurface(spawnDir, 1.05f);
+                var go = ProceduralAssets.MakeCreature(spawnPos, def.BodyColor, 1f);
                 go.name = $"Resident_{def.DisplayName}";
-                Destroy(go.GetComponent<CapsuleCollider>());
-                CapsuleCollider col = go.AddComponent<CapsuleCollider>();
+
+                // Add collider
+                var col = go.AddComponent<CapsuleCollider>();
                 col.height = 2f;
                 col.radius = 0.35f;
-
-                MaterialHelper.ApplyColor(go.GetComponent<MeshRenderer>(), def.BodyColor);
 
                 // Add agent
                 var agent = go.AddComponent<ResidentAgent>();

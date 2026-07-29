@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Asteria.Art;
 using UnityEngine;
 
 namespace Asteria.Planet.Creatures
@@ -100,27 +101,15 @@ namespace Asteria.Planet.Creatures
 
         void SpawnCreature(CreatureDefinition def, Vector3 position, Vector3 surfaceNormal)
         {
-            // Create creature GameObject
-            var go = GameObject.CreatePrimitive(PrimitiveType.Capsule);
+            // Use procedural creature mesh
+            var go = ProceduralAssets.MakeCreature(position, def.bodyColor, def.scale);
             go.name = $"Creature_{def.displayName}";
-            go.transform.position = position;
-            go.transform.localScale = Vector3.one * def.scale;
-
-            // Align to surface
             go.transform.up = surfaceNormal;
 
-            // Remove default collider, add trigger
-            Destroy(go.GetComponent<CapsuleCollider>());
+            // Add trigger for interaction
             var trigger = go.AddComponent<SphereCollider>();
             trigger.isTrigger = true;
             trigger.radius = def.interactionRadius;
-
-            // Apply color
-            var renderer = go.GetComponent<MeshRenderer>();
-            var mat = new Material(Shader.Find("Universal Render Pipeline/Lit") ?? Shader.Find("Sprites/Default"));
-            if (mat.HasProperty("_BaseColor")) mat.SetColor("_BaseColor", def.bodyColor);
-            mat.color = def.bodyColor;
-            renderer.sharedMaterial = mat;
 
             // Add creature agent
             var agent = go.AddComponent<CreatureAgent>();

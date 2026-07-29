@@ -1,3 +1,4 @@
+using Asteria.Art;
 using Asteria.Data;
 using Asteria.Interaction;
 using Asteria.Persistence;
@@ -77,17 +78,11 @@ namespace Asteria.Core
             Vector3 dir = Vector3.up;
             Vector3 pos = planet.GetPointOnSurface(dir, 2f);
 
-            GameObject obs = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
+            // Use procedural crystal mesh for observatory
+            var obs = ProceduralAssets.MakeCrystal(pos, ProceduralAssets.CrystalBlue, 8f);
             obs.name = "Observatory";
-            obs.transform.position = pos;
-            obs.transform.localScale = new Vector3(6f, 12f, 6f);
             obs.transform.up = dir;
 
-            MaterialHelper.ApplyColor(obs.GetComponent<MeshRenderer>(), new Color(0.75f, 0.85f, 0.95f));
-
-            obs.GetComponent<Collider>().isTrigger = true;
-
-            // Add an ObserveInteractable that shows discoveries
             var entry = ScriptableObject.CreateInstance<Data.ObserveEntry>();
             entry.id = "home.observatory";
             entry.displayName = "观测台";
@@ -97,12 +92,9 @@ namespace Asteria.Core
             var observe = obs.AddComponent<ObserveInteractable>();
             observe.Entry = entry;
 
-            // Add trigger for interaction detection
-            var triggerGo = new GameObject("Trigger");
-            triggerGo.transform.SetParent(obs.transform, false);
-            var trigger = triggerGo.AddComponent<SphereCollider>();
-            trigger.isTrigger = true;
-            trigger.radius = 1.5f;
+            // Add glow particles
+            var sparkle = ParticleEffects.MakeDiscoverySparkle(ProceduralAssets.CrystalBlue);
+            sparkle.transform.SetParent(obs.transform, false);
         }
 
         void CreateDepartureBeacon(PlanetBody planet)
@@ -110,24 +102,15 @@ namespace Asteria.Core
             Vector3 dir = (Vector3.forward + Vector3.right * 0.5f).normalized;
             Vector3 pos = planet.GetPointOnSurface(dir, 2f);
 
-            GameObject beacon = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
+            var beacon = ProceduralAssets.MakeBeacon(pos, ProceduralAssets.SunsetOrange, 2f);
             beacon.name = "DepartureBeacon";
-            beacon.transform.position = pos;
-            beacon.transform.localScale = new Vector3(3f, 8f, 3f);
             beacon.transform.up = dir;
 
-            MaterialHelper.ApplyColor(beacon.GetComponent<MeshRenderer>(), new Color(0.95f, 0.82f, 0.42f));
+            beacon.AddComponent<DepartureBeaconInteractable>();
 
-            beacon.GetComponent<Collider>().isTrigger = true;
-
-            // Add an interactable that starts expedition
-            var entry = ScriptableObject.CreateInstance<Data.ObserveEntry>();
-            entry.id = "home.departure_beacon";
-            entry.displayName = "远征信标";
-            entry.description = "从这里出发前往远征星球。";
-            entry.promptText = "按 E 出发远征";
-
-            var interactable = beacon.AddComponent<DepartureBeaconInteractable>();
+            // Add glow particles
+            var sparkle = ParticleEffects.MakeDiscoverySparkle(ProceduralAssets.SunsetOrange);
+            sparkle.transform.SetParent(beacon.transform, false);
         }
 
         void CreateResidentialArea(PlanetBody planet)
@@ -135,19 +118,21 @@ namespace Asteria.Core
             Vector3 dir = (Vector3.forward * 0.5f + Vector3.up * 0.8f).normalized;
             Vector3 pos = planet.GetPointOnSurface(dir, 0.5f);
 
-            GameObject area = new GameObject("ResidentialArea");
+            var area = new GameObject("ResidentialArea");
             area.transform.position = pos;
             area.transform.up = dir;
 
-            // Visual marker
-            GameObject marker = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
-            marker.name = "ResidenceMarker";
-            marker.transform.SetParent(area.transform, false);
-            marker.transform.localPosition = Vector3.zero;
-            marker.transform.localScale = new Vector3(4f, 0.5f, 4f);
-            marker.GetComponent<Collider>().isTrigger = true;
+            // Add trees around residential area
+            for (int i = 0; i < 5; i++)
+            {
+                Vector3 treeDir = Quaternion.AngleAxis(i * 72f, dir) * (dir + Vector3.right * 0.3f).normalized;
+                Vector3 treePos = planet.GetPointOnSurface(treeDir, 0.5f);
+                ProceduralAssets.MakeTree(treePos, Quaternion.FromToRotation(Vector3.up, treeDir), 0.8f);
+            }
 
-            MaterialHelper.ApplyColor(marker.GetComponent<MeshRenderer>(), new Color(0.85f, 0.78f, 0.7f));
+            // Add grass
+            var grass = ParticleEffects.MakeDust(new Color(0.5f, 0.8f, 0.3f, 0.3f));
+            grass.transform.position = pos;
         }
 
         void CreatePlaza(PlanetBody planet)
@@ -155,33 +140,35 @@ namespace Asteria.Core
             Vector3 dir = (Vector3.right * 0.6f + Vector3.up * 0.7f).normalized;
             Vector3 pos = planet.GetPointOnSurface(dir, 0.5f);
 
-            GameObject plaza = new GameObject("Plaza");
+            var plaza = new GameObject("Plaza");
             plaza.transform.position = pos;
             plaza.transform.up = dir;
 
-            GameObject marker = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
-            marker.name = "PlazaMarker";
-            marker.transform.SetParent(plaza.transform, false);
-            marker.transform.localPosition = Vector3.zero;
-            marker.transform.localScale = new Vector3(6f, 0.3f, 6f);
-            marker.GetComponent<Collider>().isTrigger = true;
+            // Add rocks as decoration
+            for (int i = 0; i < 3; i++)
+            {
+                Vector3 rockDir = Quaternion.AngleAxis(i * 120f, dir) * (dir + Vector3.forward * 0.2f).normalized;
+                Vector3 rockPos = planet.GetPointOnSurface(rockDir, 0.5f);
+                ProceduralAssets.MakeRock(rockPos, 0.5f);
+            }
 
-            MaterialHelper.ApplyColor(marker.GetComponent<MeshRenderer>(), new Color(0.9f, 0.85f, 0.75f));
+            // Add fireflies
+            var fireflies = ParticleEffects.MakeFireflies();
+            fireflies.transform.position = pos;
         }
 
         void SpawnResidents(PlanetBody planet)
         {
             var defA = ScriptableObject.CreateInstance<ResidentDefinition>();
-            defA.InitializeRuntime("lian", "莲", new Color(0.85f, 0.75f, 0.8f),
+            defA.InitializeRuntime("lian", "莲", ProceduralAssets.ResidentWarm,
                 soc: 0.6f, cur: 0.4f, war: 0.7f, ord: 0.3f, bol: 0.2f,
                 quirkList: new[] { "会给所有植物取名字" });
 
             var defB = ScriptableObject.CreateInstance<ResidentDefinition>();
-            defB.InitializeRuntime("kai", "凯", new Color(0.7f, 0.8f, 0.85f),
+            defB.InitializeRuntime("kai", "凯", ProceduralAssets.ResidentCool,
                 soc: -0.3f, cur: 0.8f, war: 0.1f, ord: 0.6f, bol: 0.7f,
                 quirkList: new[] { "害怕下坡却喜欢高处" });
 
-            // Create ResidentManager
             GameObject managerGo = new GameObject("ResidentManager");
             var manager = managerGo.AddComponent<ResidentManager>();
             manager.Initialize(new[] { defA, defB }, planet);
