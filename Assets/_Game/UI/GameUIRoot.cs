@@ -16,6 +16,9 @@ namespace Asteria.UI
         DiscoveryPopup _discoveryPopup;
         InteractionPrompt _interactionPrompt;
         ExpeditorPanel _expeditionPanel;
+        SaveLoadPanel _saveLoadPanel;
+        ResidentInteractionPanel _residentPanel;
+        CodexPanel _codexPanel;
 
         public static GameUIRoot Instance
         {
@@ -35,6 +38,9 @@ namespace Asteria.UI
         public DiscoveryPopup DiscoveryPopup => _discoveryPopup;
         public InteractionPrompt InteractionPrompt => _interactionPrompt;
         public ExpeditorPanel ExpeditionPanel => _expeditionPanel;
+        public SaveLoadPanel SaveLoadPanel => _saveLoadPanel;
+        public ResidentInteractionPanel ResidentPanel => _residentPanel;
+        public CodexPanel CodexPanel => _codexPanel;
 
         void Awake()
         {
@@ -70,6 +76,19 @@ namespace Asteria.UI
             _discoveryPopup = new DiscoveryPopup(canvasGo.transform);
             _interactionPrompt = new InteractionPrompt(canvasGo.transform);
             _expeditionPanel = new ExpeditorPanel(canvasGo.transform);
+
+            // Add panel components
+            var saveLoadGo = new GameObject("SaveLoadPanel");
+            saveLoadGo.transform.SetParent(transform, false);
+            _saveLoadPanel = saveLoadGo.AddComponent<SaveLoadPanel>();
+
+            var residentGo = new GameObject("ResidentPanel");
+            residentGo.transform.SetParent(transform, false);
+            _residentPanel = residentGo.AddComponent<ResidentInteractionPanel>();
+
+            var codexGo = new GameObject("CodexPanel");
+            codexGo.transform.SetParent(transform, false);
+            _codexPanel = codexGo.AddComponent<CodexPanel>();
         }
 
         void OnDestroy()
