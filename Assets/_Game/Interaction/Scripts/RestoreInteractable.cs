@@ -1,3 +1,4 @@
+using Asteria.Audio;
 using UnityEngine;
 
 namespace Asteria.Interaction
@@ -88,6 +89,7 @@ namespace Asteria.Interaction
             {
                 _restored = true;
                 GameHud.ShowToast($"已修复：{displayName}");
+                AudioManager.Instance?.PlayRestore();
                 Debug.Log($"[Asteria] {displayName} fully restored!");
 
                 if (_cachedRenderer != null && _cachedRenderer.material.HasProperty("_BaseColor"))

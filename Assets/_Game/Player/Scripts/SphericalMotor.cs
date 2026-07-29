@@ -1,3 +1,4 @@
+using Asteria.Audio;
 using Asteria.Data;
 using Asteria.Planet;
 using UnityEngine;
@@ -38,6 +39,7 @@ namespace Asteria.Player
         IPlayerInputSource _input;
         bool _jumpRequested;
         bool _isGrounded;
+        float _footstepTimer;
 
         public bool IsGrounded => _isGrounded;
 
@@ -139,6 +141,17 @@ namespace Asteria.Player
             }
 
             _body.linearVelocity = newTangential + verticalVelocity;
+
+            // Footstep sounds
+            if (moveInput.sqrMagnitude > 0.1f && _isGrounded)
+            {
+                _footstepTimer -= Time.fixedDeltaTime;
+                if (_footstepTimer <= 0f)
+                {
+                    _footstepTimer = running ? 0.25f : 0.4f;
+                    AudioManager.Instance?.PlayFootstep();
+                }
+            }
 
             // Face movement direction while moving; otherwise stay upright on the sphere.
             Vector3 faceDir = moveDir.sqrMagnitude > 0.001f

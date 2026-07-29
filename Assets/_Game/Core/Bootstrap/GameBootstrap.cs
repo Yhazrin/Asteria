@@ -1,3 +1,4 @@
+using Asteria.Audio;
 using Asteria.Data;
 using Asteria.Interaction;
 using Asteria.Persistence;
@@ -105,6 +106,12 @@ namespace Asteria.Core
         {
             // GameUIRoot will auto-create if needed
             var uiRoot = GameUIRoot.Instance;
+
+            // Initialize AudioManager
+            if (AudioManager.Instance != null)
+            {
+                AudioManager.Instance.StartWind(0.3f);
+            }
         }
 
         void WireDiscoveryJournal()

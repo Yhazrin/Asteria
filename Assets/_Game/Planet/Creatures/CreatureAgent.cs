@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Asteria.Audio;
 using UnityEngine;
 
 namespace Asteria.Planet.Creatures
@@ -221,6 +222,9 @@ namespace Asteria.Planet.Creatures
 
             // Visual feedback
             ShowReaction();
+
+            // Audio feedback
+            AudioManager.Instance?.PlayCreatureCall(definition.behavior.ToString().ToLower());
 
             Debug.Log($"[Creature] {definition.displayName} interacted. Trust: {_trustLevel:F2}");
         }

@@ -1,3 +1,4 @@
+using Asteria.Audio;
 using Asteria.Data;
 using UnityEngine;
 
@@ -72,6 +73,7 @@ namespace Asteria.Interaction
             if (unlocked)
             {
                 GameHud.ShowDiscovery(entry);
+                AudioManager.Instance?.PlayDiscovery();
             }
             else
             {

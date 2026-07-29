@@ -1,3 +1,4 @@
+using Asteria.Audio;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -119,6 +120,7 @@ namespace Asteria.UI
 
         void OnStartClicked()
         {
+            AudioManager.Instance?.PlayUIClick();
             Debug.Log("[MainMenu] Starting new game...");
             Core.GameBootstrap.Instance?.GoHome();
         }

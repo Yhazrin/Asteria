@@ -1,3 +1,4 @@
+using Asteria.Audio;
 using UnityEngine;
 
 namespace Asteria.Interaction
@@ -85,6 +86,7 @@ namespace Asteria.Interaction
         {
             _completed = true;
             GameHud.ShowToast($"共鸣完成：{displayName}");
+            AudioManager.Instance?.PlayCooperate();
             Debug.Log($"[Asteria] Cooperate completed: {displayName}");
 
             // Trigger global effect (e.g., aurora, unlock path)

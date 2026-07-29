@@ -1,3 +1,4 @@
+using Asteria.Audio;
 using Asteria.Data;
 using Asteria.Interaction;
 using UnityEngine;
@@ -67,6 +68,9 @@ namespace Asteria.UI
             {
                 _ui.DiscoveryPopup.Show(entry.displayName, entry.description);
             }
+
+            // Play discovery sound
+            AudioManager.Instance?.PlayDiscovery();
         }
 
         void OnDestroy()

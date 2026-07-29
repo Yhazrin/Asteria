@@ -35,6 +35,18 @@ namespace Asteria.Audio
         float _crossfadeTimer;
         bool _isCrossfading;
 
+        // Procedural clips
+        AudioClip _windClip;
+        AudioClip _footstepClip;
+        AudioClip _discoveryClip;
+        AudioClip _restoreClip;
+        AudioClip _cooperateClip;
+        AudioClip _uiClickClip;
+        AudioClip _rainClip;
+        AudioClip _creatureCuriousClip;
+        AudioClip _creatureShyClip;
+        AudioClip _creatureGuideClip;
+
         public static AudioManager Instance
         {
             get
@@ -96,6 +108,25 @@ namespace Asteria.Audio
             // Load saved volumes
             _musicVolume = PlayerPrefs.GetFloat("MusicVolume", 0.7f);
             _sfxVolume = PlayerPrefs.GetFloat("SFXVolume", 0.8f);
+
+            // Generate procedural audio clips
+            GenerateProceduralAudio();
+        }
+
+        void GenerateProceduralAudio()
+        {
+            _windClip = ProceduralAudioGenerator.GenerateWind(10f, 0.5f);
+            _footstepClip = ProceduralAudioGenerator.GenerateFootstep();
+            _discoveryClip = ProceduralAudioGenerator.GenerateDiscoverySound();
+            _restoreClip = ProceduralAudioGenerator.GenerateRestoreSound();
+            _cooperateClip = ProceduralAudioGenerator.GenerateCooperateSound();
+            _uiClickClip = ProceduralAudioGenerator.GenerateUIClick();
+            _rainClip = ProceduralAudioGenerator.GenerateRain(5f);
+            _creatureCuriousClip = ProceduralAudioGenerator.GenerateCreatureCall("curious");
+            _creatureShyClip = ProceduralAudioGenerator.GenerateCreatureCall("shy");
+            _creatureGuideClip = ProceduralAudioGenerator.GenerateCreatureCall("guide");
+
+            Debug.Log("[Audio] Procedural audio clips generated.");
         }
 
         void Update()
@@ -311,8 +342,69 @@ namespace Asteria.Audio
         /// </summary>
         public void PlayDiscovery()
         {
-            PlayTone(523f, 0.1f, 0.4f); // C5
-            // Could chain: PlayTone(659f, 0.1f, 0.4f); // E5
+            if (_discoveryClip != null) PlaySFX(_discoveryClip);
+            else PlayTone(523f, 0.1f, 0.4f);
+        }
+
+        /// <summary>
+        /// Play a footstep sound.
+        /// </summary>
+        public void PlayFootstep()
+        {
+            if (_footstepClip != null) PlaySFX(_footstepClip, 0.6f, Random.Range(0.9f, 1.1f));
+        }
+
+        /// <summary>
+        /// Play a restore sound.
+        /// </summary>
+        public void PlayRestore()
+        {
+            if (_restoreClip != null) PlaySFX(_restoreClip);
+        }
+
+        /// <summary>
+        /// Play a cooperate sound.
+        /// </summary>
+        public void PlayCooperate()
+        {
+            if (_cooperateClip != null) PlaySFX(_cooperateClip);
+        }
+
+        /// <summary>
+        /// Play a creature call sound.
+        /// </summary>
+        public void PlayCreatureCall(string creatureType)
+        {
+            AudioClip clip = creatureType switch
+            {
+                "curious" => _creatureCuriousClip,
+                "shy" => _creatureShyClip,
+                "guide" => _creatureGuideClip,
+                _ => _creatureCuriousClip
+            };
+            if (clip != null) PlaySFX(clip);
+        }
+
+        /// <summary>
+        /// Start ambient wind.
+        /// </summary>
+        public void StartWind(float intensity = 0.5f)
+        {
+            if (_windClip != null)
+            {
+                ambientSource.clip = _windClip;
+                ambientSource.volume = intensity * _ambientVolume * _masterVolume;
+                ambientSource.loop = true;
+                ambientSource.Play();
+            }
+        }
+
+        /// <summary>
+        /// Stop ambient wind.
+        /// </summary>
+        public void StopWind()
+        {
+            ambientSource.Stop();
         }
 
         void OnDestroy()
