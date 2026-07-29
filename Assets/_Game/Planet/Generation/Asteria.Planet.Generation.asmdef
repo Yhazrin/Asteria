@@ -1,0 +1,17 @@
+{
+    "name": "Asteria.Planet.Generation",
+    "rootNamespace": "Asteria.Planet.Generation",
+    "references": [
+        "Asteria.Core",
+        "Asteria.Data"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
